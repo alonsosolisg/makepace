@@ -1,0 +1,57 @@
+name: Desktop builds
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x64
+          - os: windows-latest
+            arch: x64
+          - os: macos-latest
+            arch: arm64
+          - os: macos-15-intel
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run desktop:dist -- --${{ matrix.arch }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MakePace-${{ matrix.os }}-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/desktop/*.AppImage
+            dist/desktop/*.exe
+            dist/desktop/*.dmg
+  website:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: MakePace-*
+          path: dist/installers
+          merge-multiple: true
+      - run: node scripts/build-site.mjs dist/installers
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MakePace-website-with-installers
+          path: dist/site
+          if-no-files-found: error

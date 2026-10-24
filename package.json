@@ -1,0 +1,33 @@
+{
+  "name": "makepace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "description": "Your adaptive content powerhouse",
+  "author": "MakePace",
+  "scripts": {
+    "dev": "node scripts/serve-community-preview.mjs",
+    "studio": "node scripts/serve-community-preview.mjs",
+    "test": "node --test test/*.test.mjs",
+    "desktop": "electron .",
+    "desktop:windows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File desktop/run-windows.ps1",
+    "desktop:pack": "electron-builder --dir",
+    "desktop:dist": "electron-builder"
+  },
+  "engines": {"node": ">=20"},
+  "dependencies": {"puppeteer-core": "^25.10.0", "@openai/codex": "0.164.0"},
+  "devDependencies": {"electron": "45.0.0", "electron-builder": "26.15.3"},
+  "build": {
+    "appId": "app.makepace.desktop",
+    "productName": "MakePace",
+    "artifactName": "MakePace-${version}-${os}-${arch}.${ext}",
+    "directories": {"output": "dist/desktop"},
+    "files": ["desktop/**", "scripts/**", "landing/**", "package.json", "!scripts/**/output/**"],
+    "asarUnpack": ["node_modules/@openai/**"],
+    "linux": {"target": ["AppImage"], "category": "Graphics", "icon": "scripts/studio/public/icons/icon-512.png"},
+    "win": {"target": ["nsis"], "icon": "scripts/studio/public/icons/icon-512.png"},
+    "mac": {"target": ["dmg"], "category": "public.app-category.productivity", "icon": "scripts/studio/public/icons/icon-512.png"},
+    "nsis": {"oneClick": false, "allowToChangeInstallationDirectory": true}
+  }
+}

@@ -1,0 +1,44 @@
+/* Desktop chrome shares the Studio canvas; web previews remain unchanged. */
+.desktop-app{--desktop-bar:60px}
+.desktop-app:has(body.desk:not(.onboarding-active)){--desktop-bar:52px}
+.desktop-titlebar.has-conversation #desktop-context{flex:1;margin-left:18px;justify-content:stretch;overflow:hidden}
+.desktop-titlebar.has-conversation .chat-head{display:flex;flex:1;min-width:0;height:40px;min-height:40px;max-width:none;margin:0;padding:0 8px 0 16px;border:0;border-left:1px solid var(--line);-webkit-app-region:drag}
+.desktop-titlebar.has-conversation .chat-tools{ -webkit-app-region:no-drag}
+.desktop-titlebar.has-conversation #connection{font-size:10px}
+.desktop-app body{padding-top:var(--desktop-bar)}
+.desktop-app .setup-shell,.desktop-app .onboarding-shell{min-height:calc(100dvh - var(--desktop-bar))}
+.desktop-app #startup{top:var(--desktop-bar)!important}
+/* The cached frame already includes the titlebar. Keep it at the viewport origin
+   and above the rebuilding shell until the live workspace is ready. */
+.desktop-app #studio-frame{top:0!important}
+html.desktop-app:not(.app-ready) body>.desktop-titlebar{visibility:hidden!important}
+.desktop-app .desktop-titlebar{visibility:visible!important;position:fixed;inset:0 0 auto;height:var(--desktop-bar);z-index:10000;display:flex;align-items:center;gap:16px;background:var(--canvas);user-select:none;-webkit-app-region:drag;padding:0 10px 0 22px;font-family:Manrope,sans-serif}
+.desktop-app .setup-header,.desktop-app .sidebar>.brand{display:none}
+.desktop-app .setup-shell{grid-template-rows:1fr;padding-top:0}
+.desktop-app .sidebar{padding-top:12px}.desktop-app .sidebar .workspace-card{margin-top:0}
+#desktop-context{display:flex;align-items:center;justify-content:flex-end;margin-left:auto;min-width:0;-webkit-app-region:no-drag}
+#desktop-context:has(>.page-heading){flex:1;justify-content:flex-start;margin-left:18px;padding-left:16px;border-left:1px solid var(--line);height:40px;-webkit-app-region:drag}
+#desktop-context .setup-controls{padding:0;background:transparent;border:0;box-shadow:none}
+#desktop-context .model-control{padding:0}
+#desktop-context .setup-controls #exit-onboarding{font-size:11px}
+.desktop-title{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:500;color:#7B8279;pointer-events:none;letter-spacing:.15px}
+.desktop-window-controls svg,.desktop-menu summary>svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.desktop-menu,.desktop-window-controls{-webkit-app-region:no-drag}
+.desktop-menu summary{list-style:none;display:flex;align-items:center;gap:8px;border-radius:8px;padding:7px 8px;cursor:pointer;color:var(--ink);font-size:17px;letter-spacing:-.5px;font-weight:700}
+.desktop-menu summary::-webkit-details-marker{display:none}
+.desktop-menu summary img{height:25px;width:25px}.desktop-menu summary svg{width:11px;height:11px;color:var(--muted);margin-left:5px}
+.desktop-menu summary:hover,.desktop-menu[open] summary{background:var(--tint)}
+.desktop-menu summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.desktop-menu-panel{position:absolute;top:51px;left:22px;width:252px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 35px #233D3B1A}
+.desktop-menu-label{display:block;padding:10px 10px 7px;font-size:9px;font-weight:700;letter-spacing:1.1px;color:var(--muted)}
+.desktop-menu-panel>button{width:100%;justify-content:space-between;border:0;background:transparent;font-size:12px;font-weight:500;padding:10px;border-radius:6px}
+.desktop-menu-panel button:hover{background:var(--brand-soft);color:var(--brand)}
+.desktop-menu-panel hr{border:0;border-top:1px solid var(--line);margin:6px}
+.desktop-menu-panel kbd{font:10px Manrope,sans-serif;color:var(--muted)}
+.desktop-zoom{display:flex;align-items:center;gap:4px;padding:5px 10px;font-size:12px}.desktop-zoom>span{margin-right:auto}.desktop-zoom button{padding:4px 8px;background:transparent;border-color:transparent}
+.desktop-window-controls{display:flex;height:34px;align-items:stretch;padding:0;gap:2px;flex-shrink:0;margin-left:8px}
+.desktop-window-controls button{width:38px;padding:0;border:0;background:transparent;border-radius:6px;color:var(--muted)}
+.desktop-window-controls button:hover{background:var(--tint);color:var(--ink)}
+.desktop-window-controls button:last-child:hover{background:#F5DDDA;color:#A03C30}
+.desktop-titlebar.is-inactive summary,.desktop-titlebar.is-inactive .desktop-title{opacity:1}
+.desktop-mac{padding-left:90px!important}.desktop-mac .desktop-menu-panel{left:90px}

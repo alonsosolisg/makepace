@@ -1,0 +1,17 @@
+{
+  "id": "/studio",
+  "name": "MakePace",
+  "short_name": "MakePace",
+  "description": "Your Adaptive Content Powerhouse.",
+  "start_url": "/studio",
+  "scope": "/studio",
+  "display": "standalone",
+  "background_color": "#F5F2EB",
+  "theme_color": "#F5F2EB",
+  "icons": [
+    {"src": "/__studio/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/__studio/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/__studio/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "categories": ["productivity", "business"]
+}

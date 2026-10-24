@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MakePace — Your Adaptive Content Powerhouse</title>
+<meta name="description" content="MakePace, Your Adaptive Content Powerhouse.">
+<meta name="theme-color" content="#F5F2EB">
+<link rel="icon" href="/__studio/mark.svg">
+<link rel="preload" as="image" href="/landing/powerhouse-v1.webp" fetchpriority="high">
+<link rel="preload" as="font" href="/__studio/fonts/manrope-variable.ttf" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/landing/style.css">
+<script type="module" blocking="render">
+// Paint the finished composition once, rather than swapping font and artwork.
+const artwork = new Image();
+artwork.src = '/landing/powerhouse-v1.webp';
+await Promise.allSettled([
+ artwork.decode(),
+ document.fonts.load('500 48px Manrope'),
+ document.fonts.load('750 58px Manrope')
+]);
+performance.mark('landing-ready');
+</script>
+</head><body>
+<div class="scene" aria-hidden="true"><img src="/landing/powerhouse-v1.webp" alt="" fetchpriority="high" decoding="sync" width="1672" height="941"></div>
+<header><a class="brand" href="/" aria-label="MakePace home"><img src="/__studio/mark.svg" width="36" height="36" alt=""></a></header>
+<main>
+<h1><span class="name">MakePace,</span><span>Your Adaptive<br>Content Powerhouse.</span></h1>
+<button class="cta" id="download-open" type="button">Download MakePace <svg aria-hidden="true" viewBox="0 0 24 24"><use href="/__studio/phosphor.svg#arrow-up-right"></use></svg></button>
+</main>
+<dialog id="download-dialog" aria-labelledby="download-title">
+<button class="dialog-close" aria-label="Close downloads">×</button>
+<span class="download-kicker">YOUR CONTENT WORKSPACE</span>
+<h2 id="download-title">MakePace, on your desktop.</h2>
+<p>Choose your computer. Connect your own Codex account and start creating.</p>
+<div id="download-options"></div>
+<p class="download-status" role="status">Checking available installers…</p>
+<a id="local-studio" href="/studio" hidden>Open local Studio ↗</a>
+</dialog>
+<script type="module" src="/landing/downloads.js"></script>
+</body></html>

@@ -1,0 +1,21 @@
+{
+  "status": "design proposal, not installed agent skills",
+  "version": "1.0",
+  "composition": ["base workflow", "workspace knowledge and claims", "format recipe version", "task brief", "review criteria"],
+  "workspaceFields": ["audience", "offer", "product proof", "voice", "brand assets", "CTA", "platform accounts", "cadence", "timezone"],
+  "workflows": [
+    {"id":"research-formats","name":"Find proven formats","inputs":["audience","reference accounts","collection budget"],"outputs":["source records","format recipes","evidence gaps"],"checks":["inspect original source","record observation date and metric denominators","do not infer unavailable saves or follower attribution"]},
+    {"id":"plan-angles","name":"Choose angles","inputs":["sales questions","audience moments","verified product proof","prior results"],"outputs":["experiment brief","hooks","format allocation"],"checks":["understandable without brand context","specific audience recognition","separate angle from format"]},
+    {"id":"produce-batch","name":"Produce a batch","inputs":["brief","recipe versions","brand assets"],"outputs":["storyboards","editable assets","renders","short platform captions"],"checks":["earned narrative payoff","intentional type hierarchy","consistent props and anatomy","faithful product screenshots"]},
+    {"id":"review-batch","name":"Review the details","inputs":["rendered assets","original references","platform crops"],"outputs":["QA report","versioned approval records"],"checks":["readability and safe areas","CTA and destination visibility","claims","image continuity","music and disclosures"]},
+    {"id":"prepare-publishing","name":"Prepare publishing","inputs":["approved asset hashes","existing queue","account mapping","cadence"],"outputs":["schedule proposal","publishing receipts"],"checks":["explicit authorization","account and timezone verification","idempotent retry","remote state verification"]},
+    {"id":"learn-results","name":"Learn from results","inputs":["post identifiers","metrics snapshots","comment samples"],"outputs":["format leaderboard","angle analysis","next test"],"checks":["matched observation ages","sample sizes","platform-specific rates","unknown is not zero"]}
+  ],
+  "connections": {
+    "codex": "Local app server; one provider connection, separate persistent conversation threads.",
+    "oneup": "Proposed adapter: API-key verification, social-account mapping, media upload, schedule creation and remote verification. Store credentials in desktop OS-backed secret storage, never in conversation context.",
+    "apify": "Proposed adapter: token verification, configured Actors and versions, collection limits, spend caps, asynchronous run status and dataset normalization. Actor capabilities differ; validate each before exposing metrics.",
+    "manual": "URLs, screenshots and account analytics exports; browser inspection where accessible. No guaranteed automated scraping without a provider."
+  },
+  "sources": ["https://www.oneupapp.io/api-features", "https://docs.apify.com/get-started", "https://developers.tiktok.com/docs/en/research-api-faq"]
+}
