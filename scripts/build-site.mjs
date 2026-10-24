@@ -12,7 +12,7 @@ if(process.argv[2]){
  const input=path.resolve(process.argv[2]),version=JSON.parse(await fs.readFile(path.join(root,'package.json'))).version;
  const files=await fs.readdir(input),downloads={},checksums=[];
  await fs.mkdir(path.join(out,'downloads'),{recursive:true});
- for(const [key,suffix] of [['windows-x64','win-x64.exe'],['macos-arm64','mac-arm64.dmg'],['macos-x64','mac-x64.dmg'],['linux-x64','linux-x64.AppImage']]){
+ for(const [key,suffix] of [['windows-x64','win-x64.exe'],['macos-arm64','mac-arm64.dmg'],['macos-x64','mac-x64.dmg'],['linux-x64','linux-x86_64.AppImage']]){
   const name=`MakePace-${version}-${suffix}`;
   if(!files.includes(name))throw Error('Missing installer: '+name);
   const bytes=await fs.readFile(path.join(input,name));if(bytes.length<1000000)throw Error('Installer is unexpectedly small: '+name);
