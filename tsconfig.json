@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2023", "DOM", "DOM.Iterable", "DOM.AsyncIterable", "WebWorker"],
+    "types": ["node"],
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleDetection": "force"
+  },
+  "include": [
+    "desktop/**/*.cts",
+    "scripts/**/*.mts",
+    "scripts/**/*.ts",
+    "landing/**/*.ts",
+    "test/**/*.mts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "infra"]
+}

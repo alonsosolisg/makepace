@@ -1,0 +1,14 @@
+node_modules
+dist
+.studio
+data
+.cloudflare
+.wrangler
+package-lock.json
+infra/downloads/package-lock.json
+design
+*.svg
+LICENSE
+scripts/studio/public/fonts
+scripts/studio/public/*LICENSE*
+scripts/studio/public/THIRD-PARTY-NOTICES.txt

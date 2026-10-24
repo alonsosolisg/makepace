@@ -1,100 +1,125 @@
 # MakePace
 
-Research what works. Make it yours. Get ahead.
+**Your open-source content powerhouse.**
 
-MakePace is a local content workspace with a Codex creative partner, website
-research, batch review, a TikTok-style feed preview, and a connected publishing
-queue. Brand: **MakePace**. Domain: **makepace.app**.
+MakePace is a desktop workspace for researching content formats, producing batches,
+iterating on previews and scheduling approved posts. It runs locally and connects
+to your own Codex account. Optional OneUp and Apify connections handle publishing
+and social research.
 
-## Run
+[Download](https://github.com/alonsosolisg/makepace/releases) ·
+[Website](https://makepace.app) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-Desktop: `npm ci && npm run desktop`. Electron includes the local backend and
-Codex. See [desktop setup and packaging](desktop/README.md).
+## Install
 
-Requires Node 20+, npm, and the Codex CLI for AI features.
+Download from [GitHub Releases](https://github.com/alonsosolisg/makepace/releases).
+The first public version is **0.2.0-alpha.1**. You do not need Node.js or a separate
+Codex installation. Back up important work before upgrading alpha software.
 
-The local prototype uses the user's existing Codex login. After a successful
-connection, MakePace reconnects after app-server exits and on subsequent server
-starts, using backoff from 1 to 30 seconds. Missing or rejected authentication
-requires sign-in. Reconnection never replays an interrupted turn.
-
-The installed PWA still requires this local backend. A public hosted/commercial
-release must use an approved Sign in with ChatGPT integration or API-backed
-inference with isolated user workspaces, rather than sharing this machine's
-Codex login. Product authentication and cloud execution are not implemented yet.
-See https://learn.chatgpt.com/docs/app-server#auth-endpoints and
-https://developers.openai.com/siwc.
+| Computer               | Download                           | Installation                     |
+| ---------------------- | ---------------------------------- | -------------------------------- |
+| Windows x64            | `MakePace-…-win-x64.exe`           | Run the installer.               |
+| Mac with Apple silicon | `MakePace-…-mac-arm64.dmg`         | Drag MakePace into Applications. |
+| Intel Mac              | `MakePace-…-mac-x64.dmg`           | Drag MakePace into Applications. |
+| Linux x64              | `MakePace-…-linux-x86_64.AppImage` | Make executable and run.         |
 
 ```sh
-npm ci
-npm run dev
-npm test
+chmod +x MakePace-0.2.0-alpha.1-linux-x86_64.AppImage
+./MakePace-0.2.0-alpha.1-linux-x86_64.AppImage
 ```
 
-- Landing draft: http://localhost:4885/
-- App: http://localhost:4885/studio
-- Feed: http://localhost:4885/feed
+Initial installers are **unsigned and not notarized**. Windows SmartScreen and
+macOS Gatekeeper may warn or block them. Verify the download came from this
+repository and compare its SHA-256 with `SHA256SUMS.txt` on the same release:
+Windows `Get-FileHash <file> -Algorithm SHA256`, macOS `shasum -a 256 <file>`,
+Linux `sha256sum <file>`. Checksums verify integrity, not publisher identity.
+If organizational policy blocks unsigned apps, use a reviewed source build or
+wait for signed releases; do not disable system protections globally.
 
-## Install as an app
+## Get started
 
-Refresh restores an inert, per-tab visual snapshot before reconnecting the live
-workspace. The cache lasts up to 30 minutes and is used only for the same workspace
-and viewport size. It restores the view, selected batch/post, drafts and scroll
-position; the server remains authoritative. It lives in sessionStorage and is
-discarded when the tab session ends. Without a matching snapshot, a centered,
-animated MakePace mark is shown (static with reduced motion).
+1. Open MakePace and connect Codex. Sign in through the browser if prompted.
+2. Enter your website. Review the offering, audience and social profiles; remove
+   incorrect profiles before continuing to create your workspace.
+3. Start a conversation to research formats. Review the shortlist before producing a batch.
+4. Optionally connect Apify or OneUp in Settings → Connections. Credentials are
+   encrypted using your operating system's credential storage.
+5. Review your content and exact schedule before approving publishing.
 
-Studio offers installation on the first visit. Chromium uses its native install
-prompt when available; other browsers get platform instructions. “Continue in
-browser” remembers dismissal, and the sidebar can reopen installation help.
-Standalone launches do not show the offer. Production installation requires
-HTTPS on run.makepace.app; localhost is supported for development.
+Codex needs an eligible account and internet access. Website screenshots need
+installed Chrome or Edge; `CHROME_PATH` can specify the executable. OneUp and
+Apify are separate services with their own costs. MakePace runs locally; prompts
+and selected content still go to the services you choose. It is not an offline AI model.
 
-The manifest starts at /studio, with a /studio-scoped service worker served at
-/studio-sw.js. Deploy that worker at the same root path on the product host.
-The worker caches only the generic offline reconnect page, never private
-workspace content, chat, API responses or publishing operations. The installed
-app still needs its backend. PNG icons are committed generated artifacts;
-regenerate with Python 3 + Pillow using scripts/generate-app-icons.py.
+## Updates and local files
 
-Connect uses your existing local Codex login. New turns use GPT-6.1 Sol;
-Standard/Fast can be changed in the interface. Website/social capture needs
-Chrome (cached Puppeteer Chrome is detected, or set CHROME_PATH).
+Choose **MakePace menu → Check for updates**. The app checks GitHub Releases and
+opens a newer release for you to download. Stable installations ignore prereleases;
+alpha installations include newer alphas and stable versions. There is no silent
+installation or background update download. The request sends the app version to
+GitHub, not your workspace content.
 
-## Workspace separation
+Quit MakePace before running the new installer. Your workspaces and credentials
+live outside the installation directory and are preserved. Back up app data and
+content before alpha upgrades; avoid downgrading after modifying data in a newer
+version. We use [Semantic Versioning](https://semver.org/); pre-1.0 minor releases
+may break behavior and will document migrations.
 
-App code, design studies, fonts, and tests live here. If a sibling `../gd-gtm`
-contains carousel output, it is connected as the Hey Mom workspace.
-Override with `MAKEPACE_WORKSPACE_ROOT=/absolute/workspace/path`.
-Without campaign data the app opens new-workspace onboarding.
+The MakePace menu opens your workspace and app data folders. Defaults:
 
-Hey Mom's batches, format library, renderer scripts, credentials and OneUp
-records remain in gd-gtm. They are not copied into this repository.
-Its OneUp adapter supplies the queue; Codex batch work runs in that workspace.
-This is currently a Hey Mom adapter, not a generic multi-brand publishing backend.
+- Windows: `%APPDATA%/MakePace`
+- macOS: `~/Library/Application Support/MakePace`
+- Linux: `$XDG_CONFIG_HOME/MakePace`, normally `~/.config/MakePace`
 
-Local chat history and captured research live in ignored `.studio/`.
-Credentials, node_modules, generated data, and environment files are ignored.
-The server binds only to localhost. Do not deploy the local app server publicly:
-it is not an authenticated hosted service.
+Metadata and research are under `studio/`; content is under `workspace/`.
+Uninstalling does not intentionally erase these directories. Backups contain
+private conversations/content. Credentials may need reconnecting on a new computer.
 
-## Landing and deployment
+## Develop
 
-`landing/` contains the single-screen landing. It uses the app's self-hosted
-brand/font assets under `scripts/studio/public/` and original generated artwork.
-The Download MakePace CTA opens an OS-aware installer chooser. The public source
-of download URLs is `landing/releases.json`; unavailable installers stay disabled.
-Local development also offers Open local Studio inside the chooser.
+Use Node **22.18+ on the 22.x line**, npm and Git. Build desktop installers on
+their target OS so the bundled native Codex binary matches.
 
-Source repository: https://github.com/alonsosolisg/makepace (private).
-The Desktop builds workflow produces Windows x64, macOS ARM64/Intel and Linux x64
-installers, then assembles a static website-with-installers artifact. Deploy that
-artifact to the website host; no public source repository is needed. Do not deploy
-the local Studio server. Signing/notarization and hosting still need configuration.
-Run `node scripts/build-site.mjs` for a landing-only bundle, or supply an installer
-directory to generate download URLs and SHA-256 checksums for all four artifacts.
+```sh
+git clone https://github.com/alonsosolisg/makepace.git
+cd makepace
+npm ci
+npm run desktop
+```
 
-## Identity
+For browser development, `npm run dev` serves the landing at
+http://localhost:4885/ and Studio at http://localhost:4885/studio. Browser
+development needs a separately available `codex` executable for AI; desktop
+uses the bundled provider. Never expose this server publicly.
 
-See `design/makepace/DECISIONS.md`: logo 09, Manrope, porcelain/turquoise.
-Earlier name and palette explorations are preserved under `design/`.
+```sh
+npm run check         # Typecheck, lint, formatting and behavior tests
+npm run format        # Prettier
+npm run build:site    # Static landing → dist/site
+npm run desktop:pack  # Unpacked application
+npm run desktop:dist  # Installer for the current OS
+```
+
+Runtime source is TypeScript: `.mts` for Node ESM, `.cts` for Electron CommonJS,
+and `.ts` for browser modules. The build emits disposable files into `dist/app`.
+Imports use emitted extensions for NodeNext compatibility. Never edit `dist`.
+See [desktop development](desktop/README.md) and [releasing](docs/RELEASING.md).
+
+| Directory               | Purpose                                               |
+| ----------------------- | ----------------------------------------------------- |
+| `desktop/`              | Electron, encrypted connections, publishing, updates  |
+| `scripts/studio/`       | Local server, research harness, workspace UI          |
+| `scripts/feed-preview/` | Feed review                                           |
+| `landing/`              | Public static website                                 |
+| `test/`, `types/`       | Behavior tests and shared contracts                   |
+| `infra/downloads/`      | Optional legacy R2 gateway, not needed to run the app |
+
+Private campaign assets, local state and keys are excluded. Connect existing
+content explicitly with `MAKEPACE_WORKSPACE_ROOT`; sibling projects are never
+imported automatically.
+
+## License
+
+[Apache 2.0](LICENSE). Dependencies retain their own licenses; see
+[third-party notices](THIRD_PARTY_NOTICES.md). The license does not grant rights
+to imply endorsement using MakePace's name/logo. See [trademarks](TRADEMARKS.md).

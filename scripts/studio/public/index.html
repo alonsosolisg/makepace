@@ -1,12 +1,278 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MakePace · Hey Mom</title><meta name="theme-color" content="#F5F2EB"><link rel="manifest" href="/__studio/manifest.webmanifest"><link rel="apple-touch-icon" href="/__studio/icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="MakePace"><link rel="icon" href="/__studio/mark.svg" type="image/svg+xml"><link rel="preload" href="/__studio/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="/__studio/style.css"><link rel="stylesheet" href="/__studio/desk.css"><link rel="modulepreload" href="/__studio/app.js"><script src="/__studio/startup.js"></script><script>try{document.documentElement.dataset.startWorkspace=localStorage.getItem("makepace-workspace")==="new"?"new":"hey-mom"}catch{}</script><script type="module" src="/__studio/app.js"></script><style>html{background:#F5F2EB}html:not(.app-ready) body>:not(#startup):not(#studio-frame){visibility:hidden}#startup{position:fixed;inset:0;z-index:3;display:grid;place-content:center;text-align:center;background:#F5F2EB;color:#62665C;font:13px Manrope,sans-serif}html.app-ready #startup,html.has-studio-frame #startup{display:none}#studio-frame{visibility:visible!important}.startup-logo{width:54px;height:54px;margin:auto;overflow:visible}.startup-logo .pace-bar{fill:#007D7B;transform-origin:center;animation:pace-load 1.2s ease-in-out infinite}.startup-logo .pace-bar:nth-child(2){animation-delay:.15s}.startup-logo .pace-bar:nth-child(3){animation-delay:.3s}@keyframes pace-load{0%,70%,100%{transform:scaleY(.72);opacity:.55}35%{transform:scaleY(1);opacity:1}}#startup-status:empty{display:none}#startup-status{max-width:340px;margin:20px 24px}#startup-retry{margin:auto}html.app-failed .pace-bar{animation:none}@media(prefers-reduced-motion:reduce){.startup-logo .pace-bar{animation:none}}</style></head><body><div id="startup" role="status" aria-label="Opening MakePace"><svg class="startup-logo" viewBox="0 0 64 64" aria-hidden="true"><rect class="pace-bar" x="9" y="12" width="10" height="40" rx="5"/><rect class="pace-bar" x="25" y="12" width="10" height="40" rx="5"/><path class="pace-bar" d="M41 12h5a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-5Z"/></svg><span id="startup-status"></span><button id="startup-retry" hidden onclick="location.reload()">Try again</button></div><script>window.restoreStudioFrame?.();</script>
-<nav class="sidebar"><a class="brand" href="/studio"><img class="mark" src="/__studio/mark.svg" alt=""><div>MakePace</div></a><div class="workspace-card"><img class="workspace-avatar" src="/__studio/hey-mom-icon.svg" alt=""><div>Hey Mom<small>Your workspace</small></div></div><div class="navlabel">CREATE & PUBLISH</div><button data-view="batch" class="nav active" aria-label="Batches" title="Batches" aria-current="page"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#squares-four"></use></svg> <span>Batches</span></button><button data-view="feed" class="nav" aria-label="Feed test" title="Feed test"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#device-mobile"></use></svg> <span>Feed test</span></button><button data-view="formats" class="nav" aria-label="Format library" title="Format library"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#stack"></use></svg> <span>Format library</span></button><button data-view="queue" class="nav" aria-label="Publishing queue" title="Publishing queue"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#calendar-blank"></use></svg> <span>Publishing queue</span></button><div class="sidebar-bottom"><span class="live-dot"></span> Local workspace<br><small>Your files. Your connected tools.</small></div></nav>
-<main><header><div><div class="eyebrow">HEY MOM / CONTENT WORKSPACE</div><h1 id="title">Ahead looks good.</h1></div><button id="refresh"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#arrows-clockwise"></use></svg><span>Refresh</span></button></header>
-<div class="batchbar"><label>Batch <select id="batch"></select></label><span id="count"></span><button id="new-batch" class="primary"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#plus"></use></svg><span>New batch</span></button></div>
-<section id="batch-view" class="view"><div class="view-head"><div><h2>Ready for a closer look</h2><p>Pick a post. Give feedback. Keep the next version moving.</p></div><span id="review-count" class="pill"></span></div><div id="grid"></div></section>
-<section id="feed-view" class="view" hidden><iframe id="feed" title="TikTok feed test" allow="autoplay"></iframe></section>
-<section id="formats-view" class="view" hidden><div class="view-head"><div><h2>The format shelf</h2><p>Reusable recipes from your existing library. Performance claims stay with their evidence.</p></div></div><div id="formats"></div></section>
-<section id="queue-view" class="view" hidden><div class="view-head"><div><h2>What’s going out</h2><p>Live OneUp queue · TikTok · Europe/Tallinn</p></div></div><div id="queue"></div></section>
-<section id="review" hidden><div class="review-head"><strong id="review-title"></strong><button id="close-review"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#x"></use></svg><span>Close</span></button></div><div id="slides"></div><label>Review note<textarea id="note" placeholder="What needs changing?"></textarea></label><div class="review-actions"><button id="revise">Needs revision</button><button id="approve" class="primary">Approve creative</button><button id="ask-revision"><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#arrow-up-right"></use></svg><span>Send note to Codex</span></button></div><p class="fine">Creative approval is saved locally. It does not publish or change an existing scheduled post.</p></section>
-</main>
-<aside class="chat"><div class="chat-head"><div><svg class="icon spark" aria-hidden="true"><use href="/__studio/phosphor.svg#sparkle"></use></svg><strong>Creative partner</strong><small id="connection">Codex · not connected</small></div><button id="connect">Connect</button></div><div class="context"><span class="live-dot"></span><span id="context">Current batch</span></div><div id="messages" aria-live="polite"><div class="welcome"><svg class="icon welcome-icon" aria-hidden="true"><use href="/__studio/phosphor.svg#sparkle"></use></svg><h2>A little direction.<br>A lot of making.</h2><p>Ask for sharper hooks, a new format, or the next batch. Codex works with the files in this workspace.</p></div></div><div id="requests"></div><div id="activity" role="status"></div><form id="composer"><textarea id="prompt" placeholder="What should we make or improve?" aria-label="Message Codex"></textarea><div><small>Uses your local Codex sign-in</small><button type="button" id="stop" hidden>Stop</button><button id="send" class="primary"><span>Send</span><svg class="icon " aria-hidden="true"><use href="/__studio/phosphor.svg#arrow-up"></use></svg></button></div></form></aside>
-<div id="toast" role="status"></div></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MakePace · Hey Mom</title>
+    <meta name="theme-color" content="#F5F2EB" />
+    <link rel="manifest" href="/__studio/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/__studio/icons/icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="MakePace" />
+    <link rel="icon" href="/__studio/mark.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/__studio/fonts/manrope-variable.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/__studio/style.css" />
+    <link rel="stylesheet" href="/__studio/desk.css" />
+    <link rel="modulepreload" href="/__studio/app.js" />
+    <script src="/__studio/startup.js"></script>
+    <script type="module" src="/__studio/app.js"></script>
+    <style>
+      html {
+        background: #f5f2eb;
+      }
+      html:not(.app-ready) body > :not(#startup):not(#studio-frame) {
+        visibility: hidden;
+      }
+      #startup {
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        display: grid;
+        place-content: center;
+        text-align: center;
+        background: #f5f2eb;
+        color: #62665c;
+        font:
+          13px Manrope,
+          sans-serif;
+      }
+      html.app-ready #startup,
+      html.has-studio-frame #startup {
+        display: none;
+      }
+      #studio-frame {
+        visibility: visible !important;
+      }
+      .startup-logo {
+        width: 54px;
+        height: 54px;
+        margin: auto;
+        overflow: visible;
+      }
+      .startup-logo .pace-bar {
+        fill: #007d7b;
+        transform-origin: center;
+        animation: pace-load 1.2s ease-in-out infinite;
+      }
+      .startup-logo .pace-bar:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .startup-logo .pace-bar:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      @keyframes pace-load {
+        0%,
+        70%,
+        100% {
+          transform: scaleY(0.72);
+          opacity: 0.55;
+        }
+        35% {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+      }
+      #startup-status:empty {
+        display: none;
+      }
+      #startup-status {
+        max-width: 340px;
+        margin: 20px 24px;
+      }
+      #startup-retry {
+        margin: auto;
+      }
+      html.app-failed .pace-bar {
+        animation: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .startup-logo .pace-bar {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="startup" role="status" aria-label="Opening MakePace">
+      <svg class="startup-logo" viewBox="0 0 64 64" aria-hidden="true">
+        <rect class="pace-bar" x="9" y="12" width="10" height="40" rx="5" />
+        <rect class="pace-bar" x="25" y="12" width="10" height="40" rx="5" />
+        <path class="pace-bar" d="M41 12h5a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10h-5Z" /></svg
+      ><span id="startup-status"></span><button id="startup-retry" hidden>Try again</button>
+    </div>
+    <script src="/__studio/restore-frame.js"></script>
+    <nav class="sidebar">
+      <a class="brand" href="/studio"
+        ><img class="mark" src="/__studio/mark.svg" alt="" />
+        <div>MakePace</div></a
+      >
+      <div class="workspace-card">
+        <img class="workspace-avatar" src="/__studio/hey-mom-icon.svg" alt="" />
+        <div>Hey Mom<small>Your workspace</small></div>
+      </div>
+      <div class="navlabel">CREATE & PUBLISH</div>
+      <button
+        data-view="batch"
+        class="nav active"
+        aria-label="Batches"
+        title="Batches"
+        aria-current="page"
+      >
+        <svg class="icon" aria-hidden="true">
+          <use href="/__studio/phosphor.svg#squares-four"></use>
+        </svg>
+        <span>Batches</span></button
+      ><button data-view="feed" class="nav" aria-label="Feed test" title="Feed test">
+        <svg class="icon" aria-hidden="true">
+          <use href="/__studio/phosphor.svg#device-mobile"></use>
+        </svg>
+        <span>Feed test</span></button
+      ><button data-view="formats" class="nav" aria-label="Format library" title="Format library">
+        <svg class="icon" aria-hidden="true"><use href="/__studio/phosphor.svg#stack"></use></svg>
+        <span>Format library</span></button
+      ><button data-view="queue" class="nav" aria-label="Publishing queue" title="Publishing queue">
+        <svg class="icon" aria-hidden="true">
+          <use href="/__studio/phosphor.svg#calendar-blank"></use>
+        </svg>
+        <span>Publishing queue</span>
+      </button>
+      <div class="sidebar-bottom">
+        <span class="live-dot"></span> Local workspace<br /><small
+          >Your files. Your connected tools.</small
+        >
+      </div>
+    </nav>
+    <main>
+      <header>
+        <div>
+          <div class="eyebrow">HEY MOM / CONTENT WORKSPACE</div>
+          <h1 id="title">Ahead looks good.</h1>
+        </div>
+        <button id="refresh">
+          <svg class="icon" aria-hidden="true">
+            <use href="/__studio/phosphor.svg#arrows-clockwise"></use></svg
+          ><span>Refresh</span>
+        </button>
+      </header>
+      <div class="batchbar">
+        <label
+          >Batch
+          <select id="batch"></select></label
+        ><span id="count"></span
+        ><button id="new-batch" class="primary">
+          <svg class="icon" aria-hidden="true"><use href="/__studio/phosphor.svg#plus"></use></svg
+          ><span>New batch</span>
+        </button>
+      </div>
+      <section id="batch-view" class="view">
+        <div class="view-head">
+          <div>
+            <h2>Ready for a closer look</h2>
+            <p>Pick a post. Give feedback. Keep the next version moving.</p>
+          </div>
+          <span id="review-count" class="pill"></span>
+        </div>
+        <div id="grid"></div>
+      </section>
+      <section id="feed-view" class="view" hidden>
+        <iframe id="feed" title="TikTok feed test" allow="autoplay"></iframe>
+      </section>
+      <section id="formats-view" class="view" hidden>
+        <div class="view-head">
+          <div>
+            <h2>The format shelf</h2>
+            <p>
+              Reusable recipes from your existing library. Performance claims stay with their
+              evidence.
+            </p>
+          </div>
+        </div>
+        <div id="formats"></div>
+      </section>
+      <section id="queue-view" class="view" hidden>
+        <div class="view-head">
+          <div>
+            <h2>What’s going out</h2>
+            <p>Live OneUp queue · TikTok · Europe/Tallinn</p>
+          </div>
+        </div>
+        <div id="queue"></div>
+      </section>
+      <section id="review" hidden>
+        <div class="review-head">
+          <strong id="review-title"></strong
+          ><button id="close-review">
+            <svg class="icon" aria-hidden="true"><use href="/__studio/phosphor.svg#x"></use></svg
+            ><span>Close</span>
+          </button>
+        </div>
+        <div id="slides"></div>
+        <label>Review note<textarea id="note" placeholder="What needs changing?"></textarea></label>
+        <div class="review-actions">
+          <button id="revise">Needs revision</button
+          ><button id="approve" class="primary">Approve creative</button
+          ><button id="ask-revision">
+            <svg class="icon" aria-hidden="true">
+              <use href="/__studio/phosphor.svg#arrow-up-right"></use></svg
+            ><span>Send note to Codex</span>
+          </button>
+        </div>
+        <p class="fine">
+          Creative approval is saved locally. It does not publish or change an existing scheduled
+          post.
+        </p>
+      </section>
+    </main>
+    <aside class="chat">
+      <div class="chat-head">
+        <div>
+          <svg class="icon spark" aria-hidden="true">
+            <use href="/__studio/phosphor.svg#sparkle"></use></svg
+          ><strong>Creative partner</strong><small id="connection">Codex · not connected</small>
+        </div>
+        <button id="connect">Connect</button>
+      </div>
+      <div class="context">
+        <span class="live-dot"></span><span id="context">Current batch</span>
+      </div>
+      <div id="messages" aria-live="polite">
+        <div class="welcome">
+          <svg class="icon welcome-icon" aria-hidden="true">
+            <use href="/__studio/phosphor.svg#sparkle"></use>
+          </svg>
+          <h2>A little direction.<br />A lot of making.</h2>
+          <p>
+            Ask for sharper hooks, a new format, or the next batch. Codex works with the files in
+            this workspace.
+          </p>
+        </div>
+      </div>
+      <div id="requests"></div>
+      <div id="activity" role="status"></div>
+      <form id="composer">
+        <textarea
+          id="prompt"
+          placeholder="What should we make or improve?"
+          aria-label="Message Codex"
+        ></textarea>
+        <div>
+          <small>Uses your local Codex sign-in</small
+          ><button type="button" id="stop" hidden>Stop</button
+          ><button id="send" class="primary">
+            <span>Send</span
+            ><svg class="icon" aria-hidden="true">
+              <use href="/__studio/phosphor.svg#arrow-up"></use>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </aside>
+    <div id="toast" role="status"></div>
+  </body>
+</html>

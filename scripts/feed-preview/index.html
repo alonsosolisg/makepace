@@ -1,24 +1,85 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Hey Mom · Feed test</title><link rel="stylesheet" href="/__feed/style.css"><link rel="stylesheet" href="/__feed/embed.css"></head>
-<body>
-<aside class="workspace"><button id="close-tools">Return to feed ✕</button><div class="eyebrow">HEY MOM / CREATIVE LAB</div><h1>The feed test.</h1><p>See what lands.<br>One swipe at a time.</p>
-<label>Batch<select id="batch"></select></label><label>Post<select id="jump"></select></label>
-<div class="controls"><button id="prev">↑ Previous</button><button id="next">↓ Next post</button></div>
-<button id="shuffle">Shuffle batch</button><button id="sound">Sound off</button>
-<label class="toggle"><input type="checkbox" id="guides"> Show interface overlap guides</label>
-<div id="details"></div><p class="hint">← → Slides · ↑ ↓ Posts · M Sound<br>Swipe horizontally through photos.<br>Swipe vertically or scroll to change posts.</p>
-<a href="/">Open original review grid ↗</a><p class="fine">Local simulation. Interface spacing varies across TikTok devices. No views, likes or comments are sent.</p></aside>
-<main><section id="phone" aria-label="TikTok feed simulation" tabindex="0">
-<div class="status"><b>9:41</b><span>▂▄▆  ▰</span></div>
-<div class="feednav"><span>Following</span><strong>For You</strong><span aria-hidden="true">⌕</span></div>
-<div id="media"></div><div class="shade"></div><div id="counter"></div>
-<button id="mobile-tools" aria-label="Open preview controls">☰</button>
-<div class="rail"><div class="avatar">h</div><button id="like" aria-label="Like locally">♥<small>Like</small></button><button id="comment" aria-label="Preview comments">●<small>Comment</small></button><button id="save" aria-label="Save locally">▮<small>Save</small></button><button id="share" aria-label="Copy preview link">➦<small>Share</small></button><div class="record">♫</div></div>
-<div class="caption"><div id="dots"></div><strong>Hey Mom App <span class="follow">Follow</span></strong><button id="caption-text"></button><div id="track">♫ No audio selected</div></div>
-<nav class="bottom"><span>⌂<small>Home</small></span><span>♧<small>Friends</small></span><span class="plus">+</span><span>▣<small>Inbox</small></span><span>♙<small>Profile</small></span></nav>
-<div class="safe top-safe">Top interface</div><div class="safe bottom-safe">Caption / navigation area</div><div class="safe right-safe"></div>
-<div id="toast" role="status" aria-live="polite"></div>
-<dialog id="comments"><button id="close-comments">Close ✕</button><h2>Comments preview</h2><p>This is a local test. No comments have been loaded or published.</p><textarea placeholder="What would this post make you want to say?" aria-label="Private comment draft"></textarea><p class="fine">Scratchpad only. Nothing is sent.</p></dialog>
-</section><div id="position" aria-live="polite"></div></main>
-<audio id="audio" preload="none" loop></audio><script type="module" src="/__feed/app.js"></script>
-</body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Hey Mom · Feed test</title>
+    <link rel="stylesheet" href="/__feed/style.css" />
+    <link rel="stylesheet" href="/__feed/embed.css" />
+  </head>
+  <body>
+    <aside class="workspace">
+      <button id="close-tools">Return to feed ✕</button>
+      <div class="eyebrow">HEY MOM / CREATIVE LAB</div>
+      <h1>The feed test.</h1>
+      <p>See what lands.<br />One swipe at a time.</p>
+      <label>Batch<select id="batch"></select></label><label>Post<select id="jump"></select></label>
+      <div class="controls">
+        <button id="prev">↑ Previous</button><button id="next">↓ Next post</button>
+      </div>
+      <button id="shuffle">Shuffle batch</button><button id="sound">Sound off</button>
+      <label class="toggle"
+        ><input type="checkbox" id="guides" /> Show interface overlap guides</label
+      >
+      <div id="details"></div>
+      <p class="hint">
+        ← → Slides · ↑ ↓ Posts · M Sound<br />Swipe horizontally through photos.<br />Swipe
+        vertically or scroll to change posts.
+      </p>
+      <a href="/">Open original review grid ↗</a>
+      <p class="fine">
+        Local simulation. Interface spacing varies across TikTok devices. No views, likes or
+        comments are sent.
+      </p>
+    </aside>
+    <main>
+      <section id="phone" aria-label="TikTok feed simulation" tabindex="0">
+        <div class="status"><b>9:41</b><span>▂▄▆ ▰</span></div>
+        <div class="feednav">
+          <span>Following</span><strong>For You</strong><span aria-hidden="true">⌕</span>
+        </div>
+        <div id="media"></div>
+        <div class="shade"></div>
+        <div id="counter"></div>
+        <button id="mobile-tools" aria-label="Open preview controls">☰</button>
+        <div class="rail">
+          <div class="avatar">h</div>
+          <button id="like" aria-label="Like locally">♥<small>Like</small></button
+          ><button id="comment" aria-label="Preview comments">●<small>Comment</small></button
+          ><button id="save" aria-label="Save locally">▮<small>Save</small></button
+          ><button id="share" aria-label="Copy preview link">➦<small>Share</small></button>
+          <div class="record">♫</div>
+        </div>
+        <div class="caption">
+          <div id="dots"></div>
+          <strong>Hey Mom App <span class="follow">Follow</span></strong
+          ><button id="caption-text"></button>
+          <div id="track">♫ No audio selected</div>
+        </div>
+        <nav class="bottom">
+          <span>⌂<small>Home</small></span
+          ><span>♧<small>Friends</small></span
+          ><span class="plus">+</span><span>▣<small>Inbox</small></span
+          ><span>♙<small>Profile</small></span>
+        </nav>
+        <div class="safe top-safe">Top interface</div>
+        <div class="safe bottom-safe">Caption / navigation area</div>
+        <div class="safe right-safe"></div>
+        <div id="toast" role="status" aria-live="polite"></div>
+        <dialog id="comments">
+          <button id="close-comments">Close ✕</button>
+          <h2>Comments preview</h2>
+          <p>This is a local test. No comments have been loaded or published.</p>
+          <textarea
+            placeholder="What would this post make you want to say?"
+            aria-label="Private comment draft"
+          ></textarea>
+          <p class="fine">Scratchpad only. Nothing is sent.</p>
+        </dialog>
+      </section>
+      <div id="position" aria-live="polite"></div>
+    </main>
+    <audio id="audio" preload="none" loop></audio>
+    <script type="module" src="/__feed/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "strict": true, "noUncheckedIndexedAccess": true },
+  "include": ["desktop/updates.cts"],
+  "exclude": ["node_modules", "dist"]
+}

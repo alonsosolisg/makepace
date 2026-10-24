@@ -1,17 +1,12 @@
 name: Desktop builds
 on:
   workflow_dispatch:
-    inputs:
-      installer_run:
-        description: Optional successful installer build run to reassemble without rebuilding
-        required: false
-        type: string
+  push:
+    tags: ['v*']
 permissions:
   contents: read
-  actions: read
 jobs:
   build:
-    if: ${{ inputs.installer_run == '' }}
     strategy:
       fail-fast: false
       matrix:
@@ -32,7 +27,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm test
+      - if: startsWith(github.ref, 'refs/tags/')
+        run: npx tsx scripts/release.mts --check
+      - run: npm run check
       - run: npm run desktop:dist -- --${{ matrix.arch }} --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
@@ -44,25 +41,24 @@ jobs:
             dist/desktop/*.AppImage
             dist/desktop/*.exe
             dist/desktop/*.dmg
-  website:
-    if: ${{ !cancelled() && (needs.build.result == 'success' || (needs.build.result == 'skipped' && inputs.installer_run != '')) }}
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
       - uses: actions/download-artifact@v4
         with:
           pattern: MakePace-*
           path: dist/installers
           merge-multiple: true
-          run-id: ${{ inputs.installer_run || github.run_id }}
-          github-token: ${{ github.token }}
-      - run: node scripts/build-site.mjs dist/installers
-      - uses: actions/upload-artifact@v4
-        with:
-          name: MakePace-website-with-installers
-          path: dist/site
-          if-no-files-found: error
+      - run: npx tsx scripts/release.mts
+        env:
+          GH_TOKEN: ${{ github.token }}

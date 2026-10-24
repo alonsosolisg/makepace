@@ -1,0 +1,83 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+
+test('Studio serves real batches and isolates its local mutation API', async (t) => {
+  const port = 39885;
+  const server = spawn(process.execPath, ['scripts/serve-community-preview.mjs'], {
+    env: {
+      ...process.env,
+      MAKEPACE_AUTO_CONNECT: '0',
+      COMMUNITY_PREVIEW_PORT: String(port),
+      MAKEPACE_WORKSPACE_ROOT: '/tmp/makepace-no-campaign-fixture',
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  t.after(() => server.kill());
+  await Promise.race([
+    once(server.stdout, 'data'),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(Error('Server did not start')), 5000).unref(),
+    ),
+  ]);
+  const base = `http://localhost:${port}`;
+  assert.equal((await fetch(base + '/studio')).status, 200);
+  assert.equal((await fetch(base + '/__studio/app.js')).status, 200);
+  const manifestResponse = await fetch(base + '/__studio/manifest.webmanifest');
+  assert.match(manifestResponse.headers.get('content-type'), /manifest\+json/);
+  const manifest = await manifestResponse.json();
+  assert.equal(manifest.display, 'standalone');
+  assert.equal(manifest.start_url, '/studio');
+  for (const icon of manifest.icons) assert.equal((await fetch(base + icon.src)).status, 200);
+  const worker = await fetch(base + '/studio-sw.js');
+  assert.equal(worker.status, 200);
+  assert.equal(worker.headers.get('service-worker-allowed'), '/studio');
+  assert.match(await (await fetch(base + '/__studio/offline.html')).text(), /reconnect/i);
+  assert.match(await (await fetch(base + '/')).text(), /MakePace/);
+  const artwork = await fetch(base + '/landing/powerhouse-v1.webp');
+  assert.equal(artwork.headers.get('content-type'), 'image/webp');
+  assert.match(artwork.headers.get('cache-control'), /max-age=3600/);
+  assert.equal(
+    (
+      await fetch(base + '/landing/powerhouse-v1.webp', {
+        headers: { 'If-None-Match': artwork.headers.get('etag') },
+      })
+    ).status,
+    304,
+  );
+  assert.equal((await fetch(base + '/api/studio/state')).headers.get('cache-control'), 'no-store');
+  const batches = await (await fetch(base + '/__batches')).json();
+  assert.deepEqual(batches.batches, []);
+  const send = (headers, body) =>
+    fetch(base + '/api/studio/review', { method: 'POST', headers, body });
+  assert.equal(
+    (await send({ 'Content-Type': 'application/json', Origin: 'https://example.com' }, '{}'))
+      .status,
+    403,
+  );
+  assert.equal((await send({ 'Content-Type': 'text/plain' }, '{}')).status, 415);
+  assert.equal(
+    (
+      await send(
+        { 'Content-Type': 'application/json' },
+        JSON.stringify({ batch: '../../.env', postId: 1, status: 'approved', note: '' }),
+      )
+    ).status,
+    400,
+  );
+  assert.equal((await fetch(base + '/batches/%2e%2e%2f%2e%2e%2f.env')).status, 404);
+  const state = await (await fetch(base + '/api/studio/state')).json();
+  assert.equal(state.connected, false);
+  assert.equal(state.active, null);
+  const research = await fetch(base + '/api/studio/research', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ website: 'https://example.com' }),
+  });
+  assert.equal(research.status, 400);
+  assert.match((await research.json()).error, /Connect Codex/);
+  const missingImage = await fetch(base + '/api/studio/research-image?id=not-a-workspace');
+  assert.equal(missingImage.status, 400);
+  assert.match((await missingImage.json()).error, /Unknown research/);
+});

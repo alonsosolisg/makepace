@@ -1,41 +1,101 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MakePace | Your Adaptive Content Powerhouse</title>
-<meta name="description" content="MakePace, Your Adaptive Content Powerhouse.">
-<meta name="theme-color" content="#F5F2EB">
-<link rel="icon" href="/__studio/mark.svg">
-<link rel="preload" as="image" href="/landing/powerhouse-v1.webp" fetchpriority="high">
-<link rel="preload" as="font" href="/__studio/fonts/manrope-variable.ttf" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="/landing/style.css">
-<script type="module" blocking="render">
-// Paint the finished composition once, rather than swapping font and artwork.
-const artwork = new Image();
-artwork.src = '/landing/powerhouse-v1.webp';
-await Promise.allSettled([
- artwork.decode(),
- document.fonts.load('500 48px Manrope'),
- document.fonts.load('750 58px Manrope')
-]);
-performance.mark('landing-ready');
-</script>
-</head><body>
-<div class="scene" aria-hidden="true"><img src="/landing/powerhouse-v1.webp" alt="" fetchpriority="high" decoding="sync" width="1672" height="941"></div>
-<header><a class="brand" href="/" aria-label="MakePace home"><img src="/__studio/mark.svg" width="36" height="36" alt=""></a></header>
-<main>
-<h1><span class="name">MakePace,</span><span>Your Adaptive<br>Content Powerhouse.</span></h1>
-<button class="cta" id="download-open" type="button">Download MakePace <svg aria-hidden="true" viewBox="0 0 24 24"><use href="/__studio/phosphor.svg#arrow-up-right"></use></svg></button>
-</main>
-<dialog id="download-dialog" aria-labelledby="download-title">
-<button class="dialog-close" aria-label="Close downloads">×</button>
-<h2 id="download-title" tabindex="-1">Pick yours.</h2>
-<div id="download-options">
-<section class="os-card" data-os="windows"><div class="os-logo"></div><h3>Windows</h3><div class="os-actions"><a data-download="windows-x64" aria-disabled="true">Download <span>↗</span></a></div></section>
-<section class="os-card" data-os="macos"><div class="os-logo"></div><h3>macOS</h3><div class="os-actions mac-actions"><a data-download="macos-arm64" aria-disabled="true">Apple Silicon</a><a data-download="macos-x64" aria-disabled="true">Intel</a></div></section>
-<section class="os-card" data-os="linux"><div class="os-logo"></div><h3>Linux</h3><div class="os-actions"><a data-download="linux-x64" aria-disabled="true">AppImage <span>↗</span></a></div></section>
-</div>
-<p class="download-status" role="status" hidden></p>
-<a id="local-studio" href="/studio" hidden>Open local Studio ↗</a>
-</dialog>
-<script type="module" src="/landing/downloads.js"></script>
-</body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MakePace | Your Open-Source Content Powerhouse</title>
+    <meta
+      name="description"
+      content="Your open-source content powerhouse. Research, create, refine and schedule content with an AI workspace on your computer."
+    />
+    <meta name="theme-color" content="#F5F2EB" />
+    <link rel="icon" href="/__studio/mark.svg" />
+    <link rel="preload" as="image" href="/landing/powerhouse-v1.webp" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="font"
+      href="/__studio/fonts/manrope-variable.ttf"
+      type="font/ttf"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/landing/style.css" />
+    <script type="module" blocking="render" src="/landing/startup.js"></script>
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true">
+      <img
+        src="/landing/powerhouse-v1.webp"
+        alt=""
+        fetchpriority="high"
+        decoding="sync"
+        width="1672"
+        height="941"
+      />
+    </div>
+    <header>
+      <a class="brand" href="/" aria-label="MakePace home"
+        ><img src="/__studio/mark.svg" width="36" height="36" alt=""
+      /></a>
+    </header>
+    <main>
+      <h1>
+        <span class="name">MakePace,</span><span>Your Open-Source<br />Content Powerhouse.</span>
+      </h1>
+      <a
+        class="cta"
+        href="https://github.com/alonsosolisg/makepace#install"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get it on GitHub
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <use href="/__studio/phosphor.svg#arrow-up-right"></use>
+        </svg>
+      </a>
+      <a
+        class="github-badge"
+        href="https://github.com/alonsosolisg/makepace"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Star MakePace on GitHub"
+        ><svg class="github-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.3c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.9 18.3 5.2 18.3 5.2c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.4c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"
+          /></svg
+        ><span>Star on GitHub</span><span class="badge-star" aria-hidden="true">☆</span></a
+      >
+    </main>
+    <!-- Installer chooser retained for a future signed release; not active on the landing. -->
+    <dialog id="download-dialog" aria-labelledby="download-title" hidden>
+      <button class="dialog-close" aria-label="Close downloads">×</button>
+      <h2 id="download-title" tabindex="-1">Pick yours.</h2>
+      <div id="download-options">
+        <section class="os-card" data-os="windows">
+          <div class="os-logo"></div>
+          <h3>Windows</h3>
+          <div class="os-actions">
+            <a data-download="windows-x64" aria-disabled="true">Download <span>↗</span></a>
+          </div>
+        </section>
+        <section class="os-card" data-os="macos">
+          <div class="os-logo"></div>
+          <h3>macOS</h3>
+          <div class="os-actions mac-actions">
+            <a data-download="macos-arm64" aria-disabled="true">Apple Silicon</a
+            ><a data-download="macos-x64" aria-disabled="true">Intel</a>
+          </div>
+        </section>
+        <section class="os-card" data-os="linux">
+          <div class="os-logo"></div>
+          <h3>Linux</h3>
+          <div class="os-actions">
+            <a data-download="linux-x64" aria-disabled="true">AppImage <span>↗</span></a>
+          </div>
+        </section>
+      </div>
+      <p class="download-status" role="status" hidden></p>
+      <a id="local-studio" href="/studio" hidden>Open local Studio ↗</a>
+    </dialog>
+    <!-- Restore downloads.js and #download-open when enabling the installer chooser. -->
+  </body>
+</html>

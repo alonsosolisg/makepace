@@ -42,22 +42,26 @@ display a persistent evidence shelf. Keep it below 512 KB. Schema:
 
 ```json
 {
-  "findings": [{
-    "status": "observed",
-    "title": "Descriptive format name",
-    "summary": "What the format does and why it may fit this audience",
-    "audienceFit": "The specific audience situation it addresses",
-    "hook": "Observed opening hook, or a clearly labelled proposed adaptation",
-    "structure": ["Opening", "Useful development", "Payoff"],
-    "nextTest": "A concrete adaptation and what we would learn",
-    "examples": [{
-      "title": "Creator — recognizable post hook",
-      "url": "https://www.tiktok.com/@creator/video/REAL_ID",
-      "libraryUrl": "https://videodatabase.io/video/REAL_ENTRY",
-      "observedAt": "ISO date of actual inspection",
-      "evidence": "Observed counts and relevant qualitative observations; unknowns explicit"
-    }]
-  }]
+  "findings": [
+    {
+      "status": "observed",
+      "title": "Descriptive format name",
+      "summary": "What the format does and why it may fit this audience",
+      "audienceFit": "The specific audience situation it addresses",
+      "hook": "Observed opening hook, or a clearly labelled proposed adaptation",
+      "structure": ["Opening", "Useful development", "Payoff"],
+      "nextTest": "A concrete adaptation and what we would learn",
+      "examples": [
+        {
+          "title": "Creator — recognizable post hook",
+          "url": "https://www.tiktok.com/@creator/video/REAL_ID",
+          "libraryUrl": "https://videodatabase.io/video/REAL_ENTRY",
+          "observedAt": "ISO date of actual inspection",
+          "evidence": "Observed counts and relevant qualitative observations; unknowns explicit"
+        }
+      ]
+    }
+  ]
 }
 ```
 

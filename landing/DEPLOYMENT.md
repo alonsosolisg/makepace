@@ -1,13 +1,22 @@
-# Vercel website and installer delivery
+# Landing deployment
 
-Import the private `alonsosolisg/makepace` repository into Vercel. Keep the root
-directory at the repository root; `vercel.json` builds only the static landing
-into `dist/site`. Add `makepace.app` in the project's Domains settings and follow
-the DNS records Vercel supplies. Do not deploy the local Studio backend.
+Deploy the repository root to Vercel. The checked-in configuration installs build
+dependencies without lifecycle scripts, compiles TypeScript, and serves only
+`dist/site`. Use `npm run build:site` locally. Never deploy the local app backend.
 
-Use Cloudflare R2 Standard storage for installers. Vercel hosts only the landing.
-Do not use Vercel Blob for these installers: the initial release already exceeds
-its 1 GB free storage allowance and 10 GB transfer covers very few downloads.
+The primary CTA opens the GitHub installation guide. The star badge links to the
+repository. Keep it public for access without authentication.
+
+The installer dialog, styles and TypeScript controller are retained but inactive:
+the dialog has `hidden`, there is no `#download-open` trigger, and its controller
+is not loaded. Re-enable these together after the installer distribution is ready.
+Installer URLs are generated from `package.json`; publish the corresponding
+GitHub release before enabling direct downloads.
+
+## Legacy R2 deployment
+
+The notes below describe the private 0.1.0 distribution infrastructure. It remains
+available for old links; it is not required for the open-source release.
 
 ## Free-tier safeguards
 
@@ -24,7 +33,7 @@ zero-dollar account spending cap. Cloudflare budget alerts do not stop usage.
   an independent hard request quota exists.
 - The gateway may only GET/HEAD allowlisted installer objects, never list or
   write objects. No retry loop or extra R2 metadata read per download.
-- `infra/downloads/publish.mjs` checks account storage metrics (including uploaded
+- `infra/downloads/publish.mts` checks account storage metrics (including uploaded
   and published payload/metadata), adds the complete release size conservatively,
   and refuses projected storage above 8,000,000,000 bytes. It refuses other
   account buckets, missing metrics, duplicate release keys, and overlapping local
@@ -53,8 +62,8 @@ earlier in the billing period must also be checked.
 - Bucket: `makepace-installers`, Standard, direct public access disabled.
 - Gateway: `https://makepace-downloads.alonsosniper.workers.dev`.
 - Config/code: `infra/downloads/`; its dependencies are separate from the desktop.
-- Preflight: `node infra/downloads/publish.mjs`.
-- Initial upload: `node infra/downloads/publish.mjs --upload` (refuses existing keys).
+- Preflight: `npx tsx infra/downloads/publish.mts`.
+- Initial upload: `npx tsx infra/downloads/publish.mts --upload` (refuses existing keys).
 - Gateway: `cd infra/downloads && npm ci && npm run check && npm run deploy`.
 - Tests: `npm test` at repository root.
 
@@ -80,11 +89,12 @@ The dialog detects the OS, but asks the user to choose Intel vs Apple Silicon
 because browser OS detection is not a reliable processor detector. Downloads are
 served by the download gateway; they do not pass through Vercel or the local app.
 
-`node scripts/build-site.mjs <installer-directory>` remains an alternative bundle
+`npm run build:site -- <installer-directory>` remains an alternative bundle
 for hosts that serve installers as ordinary static files. Do not upload that large
 combined bundle as the Vercel website; use the landing-only build and gateway URLs.
 
 References:
+
 - https://developers.cloudflare.com/r2/pricing/
 - https://developers.cloudflare.com/workers/platform/limits/
 - https://developers.cloudflare.com/billing/manage/budget-alerts/

@@ -1,13 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "echo Static landing requires no dependencies",
-  "buildCommand": "node scripts/build-site.mjs",
+  "installCommand": "npm ci --ignore-scripts",
+  "buildCommand": "npm run build:site",
   "outputDirectory": "dist/site",
   "headers": [
     {
       "source": "/landing/releases.json",
-      "headers": [{"key": "Cache-Control", "value": "no-cache"}]
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
   ]
 }

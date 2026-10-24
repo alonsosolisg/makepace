@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop'
 $source = Split-Path $PSScriptRoot -Parent
 $target = Join-Path $env:LOCALAPPDATA 'MakePace\development'
 New-Item -ItemType Directory -Force -Path $target | Out-Null
-foreach ($file in @('package.json','package-lock.json')) {
+foreach ($file in @('package.json','package-lock.json','tsconfig.json','LICENSE')) {
     Copy-Item (Join-Path $source $file) (Join-Path $target $file) -Force
 }
 foreach ($folder in @('desktop','scripts','landing')) {

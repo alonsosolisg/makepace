@@ -1,47 +1,45 @@
-# MakePace desktop
+# Desktop development
 
-The existing Studio runs inside Electron. A private loopback backend starts and
-stops with the app; a per-launch token protects its routes. The renderer has no
-Node access. Codex is bundled and runs on the user's computer.
+Electron hosts Studio with a private loopback backend and per-launch token.
+The renderer has context isolation and no Node access. Codex runs locally with
+the user's authentication. Reconnection retries the transport, never interrupted turns.
 
-## Development
+Use Node 22.18+ on the 22.x line, `npm ci`, then `npm run desktop`.
+`npm run desktop:pack` creates an unpacked app; `npm run desktop:dist` builds the
+current platform's installer. See [releasing](../docs/RELEASING.md).
 
-On Windows when the source lives in WSL, run `npm run desktop:windows`. This
-copies only application source into `%LOCALAPPDATA%/MakePace/development` and
-installs native Windows dependencies there. It does not mix them with Linux
-node_modules or copy campaign data or credentials. Re-run after source changes.
-The Windows app uses Windows-local workspace data and Codex authentication;
-your Linux development workspaces remain where they were.
+## Windows from WSL
 
-Run `npm ci`, then `npm run desktop`. `npm run dev` remains the browser development
-server. Use `npm run desktop:pack` for an unpacked application or
-`npm run desktop:dist` for the current platform's installer (AppImage, NSIS, DMG).
-Build on the target operating system so the matching Codex native package is
-installed. End users do not need Node or a separately installed Codex CLI.
+Run `npm run desktop:windows`. The launcher mirrors source into
+`%LOCALAPPDATA%/MakePace/development`, installs Windows dependencies, compiles
+TypeScript and opens native Windows Electron. Linux dependencies, credentials
+and campaign data are not copied. Re-run after source changes. Windows provider
+authentication and workspaces are separate from Linux development.
 
-Connect reuses an existing local Codex login, or opens ChatGPT sign-in in the
-system browser. Authentication remains managed by Codex. Model requests still
-require internet access and an eligible account. Website screenshot research
-currently requires an installed Chrome or Edge browser (`CHROME_PATH` can
-override discovery).
+## Paths and configuration
 
-Workspace records and knowledge live in Electron's userData/studio directory;
-content lives in userData/workspace. The MakePace menu opens these directories.
-UI preferences persist independently of the private backend's changing port.
-Set `MAKEPACE_WORKSPACE_ROOT` to connect an existing content directory. Desktop
-does not automatically import the development server's `.studio` records.
+Installed metadata lives in Electron `userData/studio`, content in
+`userData/workspace`. Browser development uses ignored `.studio/` and
+`data/workspace/` in this repository. The MakePace menu opens data directories.
 
-## Distribution status
+| Variable                     | Purpose                                 |
+| ---------------------------- | --------------------------------------- |
+| `MAKEPACE_WORKSPACE_ROOT`    | Explicit external content directory     |
+| `MAKEPACE_DATA_ROOT`         | Development metadata directory          |
+| `MAKEPACE_DESKTOP_USER_DATA` | Override all desktop data               |
+| `MAKEPACE_CODEX_PATH`        | Override provider executable            |
+| `CHROME_PATH`                | Chrome/Edge executable for capture      |
+| `COMMUNITY_PREVIEW_PORT`     | Development port, default 4885          |
+| `MAKEPACE_AUTO_CONNECT=0`    | Disable automatic provider reconnection |
 
-Builds are development builds: signing, notarization, automatic updates and a
-public download endpoint are not configured. The GitHub workflow builds unsigned
-artifacts on native runners for Windows x64, macOS ARM64 and x64, and Linux x64.
-It also produces a static website bundle with installers under `/downloads/`;
-deploy this to website hosting rather than exposing private GitHub artifact URLs.
-It does not publish a release. Existing limitations
-of Studio's new-workspace generation flow remain; packaging does not add those
-features.
+## Smoke testing
 
-For an isolated native smoke check, set `MAKEPACE_DESKTOP_USER_DATA` to a temporary
-directory and `MAKEPACE_DESKTOP_SMOKE` to an evidence directory. The app captures
-its actual window and exits after checking the desktop bridge and UI readiness.
+Set `MAKEPACE_DESKTOP_USER_DATA` to a temporary directory and
+`MAKEPACE_DESKTOP_SMOKE` to an evidence directory, then start desktop. It captures
+the actual window and exits after checking the bridge and UI readiness.
+From WSL use `powershell.exe -NoProfile -ExecutionPolicy Bypass -File desktop/run-windows.ps1 -Smoke`.
+Never use private client data in screenshots.
+
+Only `dist/site` is publicly hosted. PWA support remains a development convenience
+requiring the local server, not a hosted product. Initial installers are unsigned;
+updates use a manual GitHub download and preserve local data.

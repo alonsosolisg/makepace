@@ -11,17 +11,19 @@ desktop dialog before uploads or scheduling. Do not call OneUp directly or seek 
 ```json
 {
   "timezone": "Europe/Tallinn",
-  "items": [{
-    "id": "post-01",
-    "kind": "image",
-    "caption": "The approved caption",
-    "scheduledAt": "2026-12-01T14:37:00+02:00",
-    "media": ["exports/post-01/01.jpg", "exports/post-01/02.jpg"],
-    "aiGenerated": false,
-    "ownBrand": true,
-    "paidPartnership": false,
-    "autoAddMusic": true
-  }]
+  "items": [
+    {
+      "id": "post-01",
+      "kind": "image",
+      "caption": "The approved caption",
+      "scheduledAt": "2026-12-01T14:37:00+02:00",
+      "media": ["exports/post-01/01.jpg", "exports/post-01/02.jpg"],
+      "aiGenerated": false,
+      "ownBrand": true,
+      "paidPartnership": false,
+      "autoAddMusic": true
+    }
+  ]
 }
 ```
 
@@ -49,6 +51,7 @@ desktop dialog before uploads or scheduling. Do not call OneUp directly or seek 
   disclosure labels and successful publication still need their own verification.
 
 Docs checked 2026-10-24:
+
 - https://docs.oneupapp.io/docs/creating-posts/create-image-post/
 - https://docs.oneupapp.io/docs/creating-posts/create-video-post/
 - https://docs.oneupapp.io/docs/creating-posts/upload-media/upload-via-code/

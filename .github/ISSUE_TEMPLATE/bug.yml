@@ -1,0 +1,17 @@
+name: Bug report
+description: Report a reproducible MakePace issue
+body:
+  - type: input
+    id: version
+    attributes:
+      label: MakePace version and operating system
+      placeholder: 0.2.0-alpha.1, Windows 11 x64
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps, expected behavior and actual result
+      description: Redact credentials and private content from logs and screenshots.
+    validations:
+      required: true

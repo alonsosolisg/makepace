@@ -1,44 +1,451 @@
-@font-face{font-family:Manrope;src:url('/__studio/fonts/manrope-variable.ttf') format('truetype');font-weight:200 800;font-display:block}
-:root{font-family:Manrope,sans-serif;color:#233D3B;background:#F5F2EB;font-synthesis:none;color-scheme:light}
-*{box-sizing:border-box}body{margin:0;min-height:100svh;position:relative;isolation:isolate}
-.scene{position:absolute;inset:0;z-index:-1;overflow:hidden;background:#e7eadc}
-.scene img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
-.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#f5f2eb40,transparent 58%)}
-header{position:absolute;top:34px;left:42px}.brand{display:inline-flex;border-radius:4px}.brand img{display:block;width:39px;height:39px}
-main{min-height:100svh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:110px 6.25vw 150px}
-h1{font-size:clamp(32px,3.5vw,58px);font-weight:500;letter-spacing:-.055em;line-height:1.15;margin:0 0 34px;max-width:58vw}
-h1 span{display:block}h1 .name{font-weight:750;letter-spacing:-.065em;margin-bottom:15px;font-size:1.2em}
-.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:40px;padding:15px 20px;border-radius:7px;background:#007D7B;color:#FFFDFA;text-decoration:none;font-size:13px;font-weight:650;box-shadow:0 4px 18px #233d3b0c;transition:background .18s,transform .18s}
-.cta svg{width:20px;height:20px;fill:currentColor}.cta:hover{background:#006765;transform:translateY(-2px)}a:focus-visible{outline:3px solid #007D7B;outline-offset:6px}
-@media(min-aspect-ratio:2/1){main{padding-bottom:80px}.scene img{object-position:center 65%}}
-@media(max-width:700px){
-header{top:25px;left:25px}.brand img{width:32px;height:32px}
-main{justify-content:flex-start;padding:clamp(120px,21svh,180px) 28px 80px}
-h1{font-size:clamp(27px,6.8vw,43px);max-width:100%;line-height:1.18;margin-bottom:26px}h1 .name{font-size:1.35em;margin-bottom:16px}
-.scene img{object-position:73% center}.scene:after{background:linear-gradient(180deg,#f5f2ebd9 0%,#f5f2ebbf 25%,#f5f2eb40 44%,#f5f2eb00 58%)}
-.cta{font-size:12px;padding:14px 18px;gap:34px}}
-@media(max-height:550px) and (min-width:701px){main{padding:80px 6.25vw 45px}h1{font-size:32px;margin-bottom:22px}header{top:20px;left:25px}.brand img{width:28px;height:28px}}
-@media(prefers-reduced-motion:reduce){.cta{transition:none}}
-::selection{background:#007D7B;color:#FFFDFA;text-shadow:none}
-.cta{border:0;font-family:inherit;cursor:pointer}
-#download-dialog{width:min(690px,calc(100% - 32px));padding:42px 30px 28px;border:1px solid #FFFFFFA6;border-radius:23px;background:#F8F6F0;color:#233D3B;box-shadow:0 28px 100px #153D3926;overflow:visible}
-#download-dialog[open]{animation:download-enter 280ms cubic-bezier(.2,.75,.25,1) both}
-#download-dialog::backdrop{background:#173D3938;backdrop-filter:blur(6px);animation:backdrop-enter 280ms ease both}
-#download-dialog.closing{animation:download-exit 160ms ease both}#download-dialog.closing::backdrop{animation:backdrop-exit 160ms ease both}
-.dialog-close{position:absolute;right:15px;top:12px;border:0;background:transparent;width:30px;height:30px;border-radius:50%;font:23px Manrope;cursor:pointer;color:#687A72}.dialog-close:hover{background:#E6EAE1}
-#download-dialog h2{font-size:32px;font-weight:550;line-height:1.2;letter-spacing:-1.3px;text-align:center;margin:0 0 29px;outline:none}
-#download-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.os-card{position:relative;min-width:0;display:flex;align-items:center;flex-direction:column;padding:28px 12px 17px;border:1px solid #DDE3D8;border-radius:14px;background:#FFFDFA;color:#47615A;transition:border-color .18s,background .18s}
-.os-card.detected{background:#EDF3EB;border-color:#AECFC1;color:#007D7B}.os-card:has(a[href]):hover{border-color:#85B8A7;background:#F0F5ED}
-.os-logo,.os-logo svg{display:block;width:43px;height:43px}.os-card h3{font-size:14px;font-weight:650;margin:19px 0 22px;color:#233D3B}
-.os-actions{display:flex;align-items:center;justify-content:center;gap:0;width:100%;margin-top:auto;min-height:34px}
-.os-actions a{font-size:11px;font-weight:600;text-decoration:none;color:#007D7B;padding:8px 7px;border-radius:6px;white-space:nowrap}.os-actions a span{margin-left:9px}.os-actions a[href]:hover{background:#DDECE1}.os-actions a[aria-disabled]{color:#84928A;cursor:default}
-.mac-actions a{font-size:10px}.mac-actions a+a{border-left:1px solid #DDE3D8;border-radius:0 6px 6px 0}
-#download-dialog .download-status{font-size:11px;text-align:center;color:#849087;margin:18px 0 0}
-#local-studio{display:block;width:max-content;margin:16px auto 0;font-size:10px;text-decoration:none;color:#71867D}#local-studio[hidden]{display:none}
-button:focus-visible,.os-actions a:focus-visible{outline:2px solid #007D7B;outline-offset:4px}
-@keyframes download-enter{from{opacity:0;transform:translateY(12px) scale(.975)}to{opacity:1;transform:none}}
-@keyframes download-exit{from{opacity:1;transform:none}to{opacity:0;transform:translateY(5px) scale(.985)}}
-@keyframes backdrop-enter{from{opacity:0}to{opacity:1}}@keyframes backdrop-exit{from{opacity:1}to{opacity:0}}
-@media(max-width:520px){#download-dialog{padding:38px 16px 22px}#download-options{gap:8px}.os-card{padding:23px 5px 12px}.os-logo,.os-logo svg{width:35px;height:35px}.os-card h3{font-size:12px;margin:17px 0}.os-actions{min-height:58px}.mac-actions{flex-direction:column}.mac-actions a+a{border-left:0}.os-actions a{font-size:10px;padding:6px 4px}#download-dialog h2{font-size:28px;margin-bottom:23px}}
-@media(prefers-reduced-motion:reduce){#download-dialog[open],#download-dialog::backdrop,#download-dialog.closing,#download-dialog.closing::backdrop{animation:none}.os-card{transition:none}}
+@font-face {
+  font-family: Manrope;
+  src: url('/__studio/fonts/manrope-variable.ttf') format('truetype');
+  font-weight: 200 800;
+  font-display: block;
+}
+:root {
+  font-family: Manrope, sans-serif;
+  color: #233d3b;
+  background: #f5f2eb;
+  font-synthesis: none;
+  color-scheme: light;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100svh;
+  position: relative;
+  isolation: isolate;
+}
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #e7eadc;
+}
+.scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.scene:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #f5f2eb40, transparent 58%);
+}
+header {
+  position: absolute;
+  top: 34px;
+  left: 42px;
+}
+.brand {
+  display: inline-flex;
+  border-radius: 4px;
+}
+.brand img {
+  display: block;
+  width: 39px;
+  height: 39px;
+}
+main {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 110px 6.25vw 150px;
+}
+h1 {
+  font-size: clamp(32px, 3.5vw, 58px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.15;
+  margin: 0 0 34px;
+  max-width: 58vw;
+}
+h1 span {
+  display: block;
+}
+h1 .name {
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 15px 20px;
+  border-radius: 7px;
+  background: #007d7b;
+  color: #fffdfa;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: 0 4px 18px #233d3b0c;
+  transition:
+    background 0.18s,
+    transform 0.18s;
+}
+.cta svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.cta:hover {
+  background: #006765;
+  transform: translateY(-2px);
+}
+a:focus-visible {
+  outline: 3px solid #007d7b;
+  outline-offset: 6px;
+}
+@media (min-aspect-ratio: 2/1) {
+  main {
+    padding-bottom: 80px;
+  }
+  .scene img {
+    object-position: center 65%;
+  }
+}
+@media (max-width: 700px) {
+  header {
+    top: 25px;
+    left: 25px;
+  }
+  .brand img {
+    width: 32px;
+    height: 32px;
+  }
+  main {
+    justify-content: flex-start;
+    padding: clamp(120px, 21svh, 180px) 28px 80px;
+  }
+  h1 {
+    font-size: clamp(27px, 6.8vw, 43px);
+    max-width: 100%;
+    line-height: 1.18;
+    margin-bottom: 26px;
+  }
+  h1 .name {
+    font-size: 1.35em;
+    margin-bottom: 16px;
+  }
+  .scene img {
+    object-position: 73% center;
+  }
+  .scene:after {
+    background: linear-gradient(180deg, #f5f2ebd9 0%, #f5f2ebbf 25%, #f5f2eb40 44%, #f5f2eb00 58%);
+  }
+  .cta {
+    font-size: 12px;
+    padding: 14px 18px;
+    gap: 34px;
+  }
+}
+@media (max-height: 550px) and (min-width: 701px) {
+  main {
+    padding: 80px 6.25vw 45px;
+  }
+  h1 {
+    font-size: 32px;
+    margin-bottom: 22px;
+  }
+  header {
+    top: 20px;
+    left: 25px;
+  }
+  .brand img {
+    width: 28px;
+    height: 28px;
+  }
+}
+.github-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 20px;
+  padding: 7px 10px;
+  border: 1px solid #233d3b2b;
+  border-radius: 6px;
+  background: #fffdfac4;
+  color: #233d3b;
+  font-size: 11px;
+  font-weight: 650;
+  text-decoration: none;
+  box-shadow: 0 1px 2px #233d3b08;
+  transition:
+    background 160ms,
+    border-color 160ms;
+}
+.github-badge:hover {
+  background: #fffdfa;
+  border-color: #233d3b66;
+}
+.github-mark {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+.badge-star {
+  border-left: 1px solid #233d3b24;
+  padding-left: 9px;
+  font-size: 17px;
+  line-height: 15px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+}
+::selection {
+  background: #007d7b;
+  color: #fffdfa;
+  text-shadow: none;
+}
+.cta {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+#download-dialog {
+  width: min(690px, calc(100% - 32px));
+  padding: 42px 30px 28px;
+  border: 1px solid #ffffffa6;
+  border-radius: 23px;
+  background: #f8f6f0;
+  color: #233d3b;
+  box-shadow: 0 28px 100px #153d3926;
+  overflow: visible;
+}
+#download-dialog[open] {
+  animation: download-enter 280ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+#download-dialog::backdrop {
+  background: #173d3938;
+  backdrop-filter: blur(6px);
+  animation: backdrop-enter 280ms ease both;
+}
+#download-dialog.closing {
+  animation: download-exit 160ms ease both;
+}
+#download-dialog.closing::backdrop {
+  animation: backdrop-exit 160ms ease both;
+}
+.dialog-close {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  border: 0;
+  background: transparent;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font: 23px Manrope;
+  cursor: pointer;
+  color: #687a72;
+}
+.dialog-close:hover {
+  background: #e6eae1;
+}
+#download-dialog h2 {
+  font-size: 32px;
+  font-weight: 550;
+  line-height: 1.2;
+  letter-spacing: -1.3px;
+  text-align: center;
+  margin: 0 0 29px;
+  outline: none;
+}
+#download-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.os-card {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 28px 12px 17px;
+  border: 1px solid #dde3d8;
+  border-radius: 14px;
+  background: #fffdfa;
+  color: #47615a;
+  transition:
+    border-color 0.18s,
+    background 0.18s;
+}
+.os-card.detected {
+  background: #edf3eb;
+  border-color: #aecfc1;
+  color: #007d7b;
+}
+.os-card:has(a[href]):hover {
+  border-color: #85b8a7;
+  background: #f0f5ed;
+}
+.os-logo,
+.os-logo svg {
+  display: block;
+  width: 43px;
+  height: 43px;
+}
+.os-card h3 {
+  font-size: 14px;
+  font-weight: 650;
+  margin: 19px 0 22px;
+  color: #233d3b;
+}
+.os-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  margin-top: auto;
+  min-height: 34px;
+}
+.os-actions a {
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #007d7b;
+  padding: 8px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.os-actions a span {
+  margin-left: 9px;
+}
+.os-actions a[href]:hover {
+  background: #ddece1;
+}
+.os-actions a[aria-disabled] {
+  color: #84928a;
+  cursor: default;
+}
+.mac-actions a {
+  font-size: 10px;
+}
+.mac-actions a + a {
+  border-left: 1px solid #dde3d8;
+  border-radius: 0 6px 6px 0;
+}
+#download-dialog .download-status {
+  font-size: 11px;
+  text-align: center;
+  color: #849087;
+  margin: 18px 0 0;
+}
+#local-studio {
+  display: block;
+  width: max-content;
+  margin: 16px auto 0;
+  font-size: 10px;
+  text-decoration: none;
+  color: #71867d;
+}
+#local-studio[hidden] {
+  display: none;
+}
+button:focus-visible,
+.os-actions a:focus-visible {
+  outline: 2px solid #007d7b;
+  outline-offset: 4px;
+}
+@keyframes download-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes download-exit {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(5px) scale(0.985);
+  }
+}
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes backdrop-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (max-width: 520px) {
+  #download-dialog {
+    padding: 38px 16px 22px;
+  }
+  #download-options {
+    gap: 8px;
+  }
+  .os-card {
+    padding: 23px 5px 12px;
+  }
+  .os-logo,
+  .os-logo svg {
+    width: 35px;
+    height: 35px;
+  }
+  .os-card h3 {
+    font-size: 12px;
+    margin: 17px 0;
+  }
+  .os-actions {
+    min-height: 58px;
+  }
+  .mac-actions {
+    flex-direction: column;
+  }
+  .mac-actions a + a {
+    border-left: 0;
+  }
+  .os-actions a {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+  #download-dialog h2 {
+    font-size: 28px;
+    margin-bottom: 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #download-dialog[open],
+  #download-dialog::backdrop,
+  #download-dialog.closing,
+  #download-dialog.closing::backdrop {
+    animation: none;
+  }
+  .os-card {
+    transition: none;
+  }
+}

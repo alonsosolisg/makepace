@@ -1,0 +1,47 @@
+const esc = (s) =>
+  String(s ?? '').replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+  );
+const link = (s) => {
+  try {
+    const u = new URL(s);
+    return /^https?:$/.test(u.protocol) ? esc(u.href) : '#';
+  } catch {
+    return '#';
+  }
+};
+export function socialsMarkup(job) {
+  const socials = job.knowledge.socials || [];
+  const card = (s) => {
+    const group = socialGroup(job, s),
+      label = {
+        confirmed: 'Confirmed by you',
+        matched: 'Website match',
+        candidate: 'Unverified candidate',
+        rejected: 'Not yours',
+      }[group];
+    return `<div class="social-result"><div class="social-profile"><a href="${link(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.platform)} ↗<small>${esc(s.url)}</small></a><span class="pill">${label}</span></div><div class="social-actions">${group === 'rejected' ? `<button type="button" data-social-url="${esc(s.url)}" data-social-decision="reset">Undo</button>` : `${group === 'candidate' ? `<button type="button" data-social-url="${esc(s.url)}" data-social-decision="confirmed">This is ours</button>` : ''}<button type="button" aria-label="Remove ${esc(s.platform)} profile ${esc(s.url)}" data-social-url="${esc(s.url)}" data-social-decision="rejected">Remove</button>`}</div></div>`;
+  };
+  const matched = socials.filter((s) => ['matched', 'confirmed'].includes(socialGroup(job, s))),
+    candidates = socials.filter((s) => socialGroup(job, s) === 'candidate'),
+    rejected = socials.filter((s) => socialGroup(job, s) === 'rejected');
+  return `<div class="knowledge-card-heading"><h2>Social accounts</h2><button type="button" id="check-socials" ${job.socialChecking ? 'disabled' : ''}>${job.socialChecking ? 'Checking…' : 'Recheck ↗'}</button></div>${matched.map(card).join('') || '<p>No matched accounts yet.</p>'}${candidates.length ? `<details><summary>${candidates.length} profiles to verify</summary><p>Confirm which profiles belong to you.</p>${candidates.map(card).join('')}</details>` : ''}${rejected.length ? `<details><summary>${rejected.length} removed profiles</summary>${rejected.map(card).join('')}</details>` : ''}`;
+}
+export function knowledgeMarkup(job) {
+  const k = job.confirmedKnowledge || job.knowledge,
+    warnings = [...(job.warnings || []), ...(k.uncertainties || [])];
+  return `<div class="knowledge-heading"><h1>Review your business</h1></div><div class="knowledge-layout"><aside><div class="knowledge-source-card">${job.screenshot ? `<img class="website-capture" alt="Captured homepage" src="/api/studio/research-image?id=${encodeURIComponent(job.id)}">` : ''}<a href="${link(job.website)}" target="_blank" rel="noopener noreferrer">Visit your website ↗</a><details><summary>${k.sources.length} research sources</summary><ul class="knowledge-sources">${k.sources.map((s) => `<li><a href="${link(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a><p>${esc(s.finding)}</p></li>`).join('')}</ul></details>${warnings.length ? `<details><summary>${warnings.length} things to check</summary><ul class="knowledge-uncertainties">${warnings.map((s) => '<li>' + esc(s) + '</li>').join('')}</ul></details>` : ''}</div></aside><form id="knowledge-form"><div class="knowledge-card"><label>Business name<input name="name" value="${esc(k.name)}"></label></div>${[
+    ['offering', 'What you offer'],
+    ['audience', 'Who it’s for'],
+    ['positioning', 'Why they choose you'],
+  ]
+    .map(
+      ([key, title]) =>
+        `<div class="knowledge-card"><label>${title}<textarea name="${key}">${esc(k[key])}</textarea></label></div>`,
+    )
+    .join(
+      '',
+    )}<div class="knowledge-card"><div class="social-discovery">${socialsMarkup(job)}</div><label>Add a profile<textarea name="socials" placeholder="Paste your profile links here…">${esc(k.socialNotes || '')}</textarea></label></div></form></div><footer class="knowledge-actions"><button type="button" id="research-another">Use another website</button><p class="setup-error" role="alert"></p><button id="knowledge-continue" class="primary" type="submit" form="knowledge-form">Continue <span aria-hidden="true">↗</span></button></footer>`;
+}
+import { socialGroup } from './social-ownership.js';

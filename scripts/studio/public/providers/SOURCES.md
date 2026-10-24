@@ -7,6 +7,7 @@
 These marks identify connected third-party services, not MakePace branding.
 
 Connection guides checked on 2026-10-24 against:
+
 - https://docs.oneupapp.io/docs/overview/
 - https://docs.apify.com/integrations/api
 

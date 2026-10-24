@@ -11,7 +11,7 @@ files at the end of a turn, adds clickable output cards to that conversation and
 opens the output panel. Preserve other entries. Example schema:
 
 ```json
-{"outputs":[{"path":"outputs/format-study.md","title":"Format study","kind":"research"}]}
+{ "outputs": [{ "path": "outputs/format-study.md", "title": "Format study", "kind": "research" }] }
 ```
 
 Use relative paths. Supported previews: Markdown, text, JSON, PNG/JPEG/WebP and

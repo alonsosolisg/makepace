@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories:
+      - /
+      - /infra/downloads
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    cooldown:
+      default-days: 7
+    groups:
+      tooling:
+        dependency-type: development
+        update-types: [minor, patch]
+      runtime-patches:
+        dependency-type: production
+        update-types: [patch]
+    ignore:
+      - dependency-name: '*'
+        update-types: [version-update:semver-major]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+    groups:
+      actions:
+        patterns: ['*']
