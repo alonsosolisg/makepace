@@ -1,0 +1,7 @@
+{
+  "name": "makepace-downloads",
+  "private": true,
+  "type": "module",
+  "devDependencies": { "cf": "1.0.0-beta.21", "wrangler": "4.152.0" },
+  "scripts": { "deploy": "cf deploy", "check": "cf deploy --dry-run" }
+}

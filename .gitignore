@@ -1,4 +1,6 @@
 node_modules/
+.cloudflare/
+.wrangler/
 .studio/
 .env
 .env.*
