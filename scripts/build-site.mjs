@@ -6,7 +6,7 @@ const root=path.resolve(import.meta.dirname,'..'),out=path.join(root,'dist/site'
 await fs.mkdir(path.join(out,'landing'),{recursive:true});
 await fs.mkdir(path.join(out,'__studio/fonts'),{recursive:true});
 await fs.copyFile(path.join(root,'landing/index.html'),path.join(out,'index.html'));
-for(const file of ['style.css','downloads.js','powerhouse-v1.webp','releases.json'])await fs.copyFile(path.join(root,'landing',file),path.join(out,'landing',file));
+for(const file of ['style.css','downloads.js','os-icons.js','powerhouse-v1.webp','releases.json'])await fs.copyFile(path.join(root,'landing',file),path.join(out,'landing',file));
 for(const file of ['mark.svg','phosphor.svg','fonts/manrope-variable.ttf','fonts/OFL.txt','PHOSPHOR-LICENSE.txt'])await fs.copyFile(path.join(root,'scripts/studio/public',file),path.join(out,'__studio',file));
 if(process.argv[2]){
  const input=path.resolve(process.argv[2]),version=JSON.parse(await fs.readFile(path.join(root,'package.json'))).version;

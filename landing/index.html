@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MakePace — Your Adaptive Content Powerhouse</title>
+<title>MakePace | Your Adaptive Content Powerhouse</title>
 <meta name="description" content="MakePace, Your Adaptive Content Powerhouse.">
 <meta name="theme-color" content="#F5F2EB">
 <link rel="icon" href="/__studio/mark.svg">
@@ -28,11 +28,13 @@ performance.mark('landing-ready');
 </main>
 <dialog id="download-dialog" aria-labelledby="download-title">
 <button class="dialog-close" aria-label="Close downloads">×</button>
-<span class="download-kicker">YOUR CONTENT WORKSPACE</span>
-<h2 id="download-title">MakePace, on your desktop.</h2>
-<p>Choose your computer. Connect your own Codex account and start creating.</p>
-<div id="download-options"></div>
-<p class="download-status" role="status">Checking available installers…</p>
+<h2 id="download-title" tabindex="-1">Pick yours.</h2>
+<div id="download-options">
+<section class="os-card" data-os="windows"><div class="os-logo"></div><h3>Windows</h3><div class="os-actions"><a data-download="windows-x64" aria-disabled="true">Download <span>↗</span></a></div></section>
+<section class="os-card" data-os="macos"><div class="os-logo"></div><h3>macOS</h3><div class="os-actions mac-actions"><a data-download="macos-arm64" aria-disabled="true">Apple Silicon</a><a data-download="macos-x64" aria-disabled="true">Intel</a></div></section>
+<section class="os-card" data-os="linux"><div class="os-logo"></div><h3>Linux</h3><div class="os-actions"><a data-download="linux-x64" aria-disabled="true">AppImage <span>↗</span></a></div></section>
+</div>
+<p class="download-status" role="status" hidden></p>
 <a id="local-studio" href="/studio" hidden>Open local Studio ↗</a>
 </dialog>
 <script type="module" src="/landing/downloads.js"></script>
