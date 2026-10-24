@@ -29,14 +29,14 @@ formats, content and publishing plans together in one workspace.
 
 ![MakePace's six workflow starters: research, angles, production, review, publishing and learning](docs/images/workflows.png)
 
-These are real captures of the current Studio interface in browser development
-mode, showing a workspace before content has been produced. The desktop app uses
+These are real captures of the Hey Mom workspace in browser development
+mode, with an empty conversation and disconnected integrations. The desktop app uses
 the same interface with native connection and credential storage support. They
 show the starting experience, not a completed batch or a verified publishing run.
 
 ### Bring your own connections
 
-![MakePace's first onboarding step: connect Codex with your ChatGPT account](docs/images/connect-codex.png)
+![Hey Mom workspace connections for Codex, OneUp and Apify](docs/images/connections.png)
 
 - **Codex:** powers the conversations; requires an eligible account and internet.
 - **Apify (optional):** collects social research through your account.

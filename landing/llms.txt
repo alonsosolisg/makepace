@@ -1,0 +1,16 @@
+# MakePace
+
+> An open-source desktop workspace for researching content formats, producing batches, refining previews and scheduling approved posts.
+
+MakePace runs on Windows, macOS and Linux and connects to the user's Codex account.
+Optional Apify and OneUp connections support social research and publishing.
+Software is Apache-2.0 licensed; connected services may charge separately.
+Current installers are alpha software, unsigned, and not notarized on macOS.
+Local operation does not mean offline AI: selected content goes to connected services.
+
+## Official sources
+- [Product overview](https://www.makepace.app/about/): Workflow, requirements and limitations.
+- [Source and installation](https://github.com/alonsosolisg/makepace): README, license and contribution instructions.
+- [Releases](https://github.com/alonsosolisg/makepace/releases): Published versions and checksums.
+- [Privacy](https://www.makepace.app/privacy/): Website and desktop data handling.
+- [Terms](https://www.makepace.app/terms/): Website use and software license.

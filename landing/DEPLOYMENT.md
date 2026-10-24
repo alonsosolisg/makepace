@@ -13,7 +13,32 @@ is not loaded. Re-enable these together after the installer distribution is read
 Installer URLs are generated from `package.json`; publish the corresponding
 GitHub release before enabling direct downloads.
 
-## Legacy R2 deployment
+## Indexing and legal publication checklist
+
+The canonical public host is `https://www.makepace.app`; the apex redirects there.
+The static bundle includes `/robots.txt`, `/sitemap.xml`, `/llms.txt`, `/about/`,
+`/privacy/` and `/terms/`. The homepage carries canonical, social-card and
+SoftwareApplication structured data. `llms.txt` is a convenience summary, not a
+ranking guarantee; `AGENTS.md` is repository guidance, not a search requirement.
+
+The operator is Alonso Solis; the public contact is alonsosolisgerloni@gmail.com
+(confirmed by the operator). Privacy describes local storage, connected providers,
+hosting and email, with provider-managed retention rather than an invented fixed
+log lifetime. Review the notices when adding analytics, accounts, billing or
+hosted workspace storage, or changing providers and their data arrangements.
+
+After deployment:
+
+- Verify all four sitemap pages return 200 and internal links resolve.
+- Verify the domain in Google Search Console using its supplied DNS TXT record.
+- Submit `https://www.makepace.app/sitemap.xml`; inspect and request homepage indexing.
+- Optionally import the verified property into Bing Webmaster Tools and submit
+  the same sitemap.
+- Check the canonical URL and social preview using deployed HTML. Do not add
+  invented ratings, users, endorsements or unsupported feature claims to schema.
+- Keep previews out of indexing using the hosting provider's preview protections.
+
+## Legacy R2 deployment details
 
 The notes below describe the private 0.1.0 distribution infrastructure. It remains
 available for old links; it is not required for the open-source release.

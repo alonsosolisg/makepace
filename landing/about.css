@@ -1,0 +1,358 @@
+.about-page {
+  background: #f5f2eb;
+}
+.about-header {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: auto;
+  padding: 32px 48px;
+  gap: 24px;
+}
+.about-brand {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  color: #233d3b;
+  text-decoration: none;
+  font-weight: 750;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+}
+.header-link {
+  color: #233d3b;
+  font-size: 13px;
+  text-decoration: none;
+}
+.about-main {
+  display: block;
+  min-height: 0;
+  max-width: 1280px;
+  padding: 0 48px;
+  margin: auto;
+}
+.about-page .eyebrow {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  color: #007d7b;
+  margin: 0 0 24px;
+}
+.about-page h1 {
+  font-size: clamp(48px, 6vw, 78px);
+  max-width: none;
+  line-height: 1.06;
+  letter-spacing: -0.065em;
+  font-weight: 550;
+  margin: 0;
+}
+.about-page h1 em {
+  font-style: normal;
+  color: #007d7b;
+}
+.about-page h2 {
+  font-size: clamp(30px, 3.2vw, 44px);
+  line-height: 1.16;
+  letter-spacing: -0.05em;
+  font-weight: 550;
+  margin: 0 0 24px;
+}
+.about-page p {
+  font-size: 15px;
+  line-height: 1.85;
+}
+.about-hero {
+  padding: 72px 0 64px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 0 80px;
+  align-items: end;
+}
+.about-hero .eyebrow {
+  grid-column: 1 / -1;
+}
+.hero-description {
+  max-width: 390px;
+  padding-bottom: 6px;
+}
+.hero-description p {
+  font-size: 17px;
+  margin: 0 0 28px;
+}
+.text-link {
+  color: #007d7b;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.product-shot {
+  margin: 0;
+  border: 1px solid #233d3b18;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fffdfa;
+}
+.product-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.product-shot a {
+  display: block;
+}
+.product-shot figcaption {
+  padding: 16px 22px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #566966;
+}
+.product-shot figcaption span {
+  float: right;
+}
+.hero-shot {
+  scroll-margin-top: 24px;
+  box-shadow: 0 24px 70px -40px #233d3b60;
+}
+.shot-label {
+  display: flex;
+  gap: 9px;
+  padding: 17px 22px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid #233d3b15;
+}
+.shot-label span {
+  margin-left: auto;
+  color: #6a7d78;
+}
+.section-space {
+  padding: 100px 0;
+}
+.walkthrough {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 100px;
+}
+.workflow-steps details {
+  border-bottom: 1px solid #233d3b24;
+}
+.workflow-steps summary {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 25px 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.workflow-steps summary::-webkit-details-marker {
+  display: none;
+}
+.step-number {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #007d7b;
+}
+.expand {
+  margin-left: auto;
+  font-size: 25px;
+  font-weight: 400;
+  color: #007d7b;
+}
+details[open] .expand {
+  transform: rotate(45deg);
+}
+.step-content {
+  padding: 0 0 24px 38px;
+}
+.step-content > p:first-child {
+  margin-top: 0;
+}
+.step-content blockquote {
+  margin: 20px 0;
+  padding: 18px 20px;
+  background: #e7ece5;
+  border-left: 2px solid #007d7b;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.step-content .review-note {
+  font-size: 12px;
+  color: #566966;
+}
+.workflow-gallery {
+  display: grid;
+  grid-template-columns: 0.75fr 1.4fr;
+  gap: 50px;
+  align-items: center;
+  background: #e7ece5;
+  border-radius: 20px;
+  padding: 44px;
+}
+.workflow-gallery > div > p:last-child {
+  color: #566966;
+}
+.connection-section {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.connections {
+  margin: 30px 0 0;
+}
+.connections > div {
+  border-top: 1px solid #233d3b20;
+  padding: 18px 0;
+}
+.connections dt {
+  font-size: 14px;
+  font-weight: 700;
+}
+.connections dt span {
+  font-size: 10px;
+  color: #566966;
+  font-weight: 400;
+  margin-left: 10px;
+}
+.connections dd {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #566966;
+}
+.practical-notes {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 100px;
+  padding: 60px 0 80px;
+  border-top: 1px solid #233d3b20;
+}
+.notes-list details {
+  border-bottom: 1px solid #233d3b20;
+}
+.notes-list summary {
+  padding: 20px 0;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+.notes-list p {
+  color: #566966;
+  font-size: 14px;
+  margin-top: 0;
+}
+.notes-list a {
+  color: #007d7b;
+}
+.about-end {
+  text-align: center;
+  padding: 64px 24px;
+  border-radius: 20px;
+  background: #183c3b;
+  color: #fffdfa;
+}
+.about-end .eyebrow {
+  color: #9ed8ce;
+}
+.about-end h2 {
+  font-size: clamp(32px, 4vw, 52px);
+}
+.about-end .cta {
+  margin-top: 12px;
+  background: #f5f2eb;
+  color: #183c3b;
+}
+.about-end > p:last-child {
+  font-size: 12px;
+  color: #c3d3cd;
+  margin: 22px 0 0;
+}
+.about-footer {
+  max-width: 1280px;
+  margin: auto;
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.about-footer nav {
+  display: flex;
+  gap: 24px;
+}
+.about-footer nav a {
+  color: #566966;
+  text-decoration: none;
+  font-size: 12px;
+}
+.about-page a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.about-page :focus-visible {
+  outline: 2px solid #007d7b;
+  outline-offset: 5px;
+}
+@media (max-width: 800px) {
+  .about-header {
+    padding: 24px;
+  }
+  .about-main {
+    padding: 0 24px;
+  }
+  .about-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 48px 0 36px;
+  }
+  .about-hero .eyebrow {
+    margin-bottom: 0;
+  }
+  .hero-description {
+    max-width: 520px;
+  }
+  .hero-description p {
+    font-size: 15px;
+  }
+  .walkthrough,
+  .connection-section,
+  .practical-notes {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .section-space {
+    padding: 60px 0;
+  }
+  .workflow-gallery {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 20px;
+  }
+  .connection-section > figure {
+    order: 2;
+  }
+  .practical-notes {
+    padding: 48px 0;
+  }
+  .product-shot figcaption span {
+    float: none;
+    display: block;
+    margin-top: 6px;
+  }
+  .about-footer {
+    padding: 32px 24px;
+    flex-wrap: wrap;
+  }
+  .header-link {
+    font-size: 11px;
+  }
+  .workflow-steps summary {
+    font-size: 18px;
+  }
+}

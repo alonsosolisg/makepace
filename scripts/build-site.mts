@@ -6,9 +6,22 @@ const root = path.resolve(import.meta.dirname, '..'),
   out = path.resolve(process.cwd(), 'dist/site');
 await fs.mkdir(path.join(out, 'landing'), { recursive: true });
 await fs.mkdir(path.join(out, '__studio/fonts'), { recursive: true });
+await fs.mkdir(path.join(out, 'landing/images'), { recursive: true });
+for (const file of ['workspace.png', 'workflows.png', 'connections.png'])
+  await fs.copyFile(
+    path.resolve(process.cwd(), 'docs/images', file),
+    path.join(out, 'landing/images', file),
+  );
 await fs.copyFile(path.join(root, 'landing/index.html'), path.join(out, 'index.html'));
+for (const file of ['robots.txt', 'sitemap.xml', 'llms.txt'])
+  await fs.copyFile(path.join(root, 'landing', file), path.join(out, file));
+for (const page of ['about', 'privacy', 'terms']) {
+  await fs.mkdir(path.join(out, page), { recursive: true });
+  await fs.copyFile(path.join(root, 'landing', `${page}.html`), path.join(out, page, 'index.html'));
+}
 for (const file of [
   'style.css',
+  'about.css',
   'startup.js',
   'downloads.js',
   'os-icons.js',

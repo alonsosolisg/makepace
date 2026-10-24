@@ -14,6 +14,88 @@
 * {
   box-sizing: border-box;
 }
+.site-footer {
+  position: absolute;
+  bottom: 24px;
+  left: 6.25vw;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 3px 8px;
+  border: 1px solid #ffffff24;
+  border-radius: 999px;
+  background: #183c3bf2;
+  box-shadow: 0 2px 12px #102c2b12;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+}
+.site-footer a {
+  padding: 9px 13px;
+  color: #fffdfa;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+.site-footer a + a {
+  position: relative;
+}
+.site-footer a + a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 5px);
+  height: 10px;
+  width: 1px;
+  background: #ffffff30;
+}
+.site-footer a:hover {
+  text-decoration: underline;
+}
+.site-footer a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+  border-radius: 2px;
+}
+.legal-page header {
+  position: static;
+  padding: 28px 6.25vw;
+}
+.legal-page main {
+  display: block;
+  min-height: auto;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 48px 24px 100px;
+  line-height: 1.8;
+}
+.legal-page h1 {
+  max-width: none;
+  font-size: 38px;
+  margin-bottom: 16px;
+}
+.legal-page h2 {
+  font-size: 19px;
+  margin-top: 32px;
+}
+.legal-page a {
+  color: #007d7b;
+  text-underline-offset: 3px;
+}
+.legal-page .site-footer {
+  position: static;
+  padding: 24px 6.25vw;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.legal-page .site-footer a {
+  color: #233d3b;
+  text-shadow: none;
+}
+.legal-page .site-footer a + a::before {
+  background: #233d3b30;
+}
 body {
   margin: 0;
   min-height: 100svh;
