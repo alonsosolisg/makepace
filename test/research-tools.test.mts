@@ -1,9 +1,46 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { researchTools, runResearchTool } from '../scripts/studio/research-tools.mjs';
 import { recordTool } from '../scripts/studio/tool-activity.mjs';
 const { apifyResearch } = createRequire(import.meta.url)('../desktop/apify.cjs');
+test('issued collection references survive restart without storing credentials', async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'makepace-apify-'));
+  try {
+    const options = {
+      directory,
+      withKey: (fn) => fn('private-test-key'),
+      request: async (url) => ({
+        ok: true,
+        json: async () =>
+          url.includes('/items?')
+            ? []
+            : {
+                data: url.includes('/runs?')
+                  ? { id: 'persisted', defaultDatasetId: 'dataset', status: 'RUNNING' }
+                  : { status: 'SUCCEEDED' },
+              },
+      }),
+    };
+    await apifyResearch(options)('start', {
+      platform: 'tiktok',
+      urls: ['https://www.tiktok.com/@example'],
+    });
+    const restarted = apifyResearch(options);
+    assert.equal((await restarted('result', { runId: 'persisted' })).status, 'SUCCEEDED');
+    await assert.rejects(() => restarted('result', { runId: 'unknown' }));
+    assert.ok(
+      !(await fs.readFile(path.join(directory, 'apify-runs.json'), 'utf8')).includes(
+        'private-test-key',
+      ),
+    );
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
 test('collection is bounded, credentials stay in headers, and only issued runs are readable', async () => {
   const requests = [];
   const collect = apifyResearch({

@@ -6,6 +6,15 @@ the internal source catalog, access requirements and task-specific fallback rout
 Start with relevant organic examples, not an exhaustive sweep of every source.
 Keep the source directory out of the UI; cite the actual examples in outputs.
 
+If `research/social-baseline.json` exists, read it before requesting another
+account scrape. It contains imported published posts, captions, original links
+and dated metric snapshots. Use these as this brand's starting baseline; compare
+available views, likes, comments and saves without treating missing values as
+zero. Inspect original media before assigning a visual format. These imports
+are not editable source assets, ownership verification, follower attribution or
+evidence that a high-performing post caused growth. Keep the brand's own baseline
+distinct from external examples and avoid calling small samples proven winners.
+
 MakePace provides `makepace_inspect_page`: use it to open original pages and
 inspect actual screenshots, even when no T3/MCP browser is connected. For blocked
 social pages try `makepace_collect_social` with the saved Apify connection, then

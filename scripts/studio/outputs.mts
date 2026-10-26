@@ -50,6 +50,12 @@ export async function collectOutputs(root) {
   entries = [
     ...entries,
     { path: 'research-evidence.json', title: 'Research evidence', kind: 'research' },
+    {
+      path: 'research/social-baseline.json',
+      title: 'Published content baseline',
+      kind: 'research',
+      description: 'Imported posts, captions, source links and observed metrics.',
+    },
     { path: 'publishing-plan.json', title: 'Publishing plan', kind: 'publishing' },
   ].filter((entry) => entry?.path !== 'research/content-format-research.json');
   const result = [],
@@ -67,6 +73,7 @@ export async function collectOutputs(root) {
           .slice(0, 24),
         path: entry.path,
         title: String(entry.title || path.basename(entry.path)).slice(0, 160),
+        description: String(entry.description || '').slice(0, 500),
         kind: String(entry.kind || file.type).slice(0, 40),
         type: file.type,
         hash,

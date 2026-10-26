@@ -173,15 +173,29 @@
       <section id="batch-view" class="view">
         <div class="view-head">
           <div>
-            <h2>Ready for a closer look</h2>
-            <p>Pick a post. Give feedback. Keep the next version moving.</p>
+            <h2>Your content</h2>
+            <p>Open a post to play it. Review the whole sequence.</p>
           </div>
           <span id="review-count" class="pill"></span>
         </div>
+        <div class="content-filters">
+          <input
+            id="content-search"
+            type="search"
+            placeholder="Search titles, angles or captions"
+            aria-label="Search content"
+          /><select id="content-status" aria-label="Review status">
+            <option value="all">All posts</option>
+            <option value="unreviewed">Not reviewed</option>
+            <option value="approved">Approved</option>
+            <option value="revise">Needs revision</option></select
+          ><span id="content-results" aria-live="polite"></span>
+        </div>
         <div id="grid"></div>
+        <section id="preview-archive"></section>
       </section>
       <section id="feed-view" class="view" hidden>
-        <iframe id="feed" title="TikTok feed test" allow="autoplay"></iframe>
+        <iframe id="feed" title="TikTok feed test" allow="autoplay; fullscreen"></iframe>
       </section>
       <section id="formats-view" class="view" hidden>
         <div class="view-head">

@@ -7,6 +7,11 @@ const root = path.resolve(import.meta.dirname, '..'),
 await fs.mkdir(path.join(out, 'landing'), { recursive: true });
 await fs.mkdir(path.join(out, '__studio/fonts'), { recursive: true });
 await fs.mkdir(path.join(out, 'landing/images'), { recursive: true });
+for (const [source, target] of [
+  ['icon-192.png', 'favicon.png'],
+  ['icon-180.png', 'apple-touch-icon.png'],
+])
+  await fs.copyFile(path.join(root, 'scripts/studio/public/icons', source), path.join(out, target));
 for (const file of ['workspace.png', 'workflows.png', 'connections.png'])
   await fs.copyFile(
     path.resolve(process.cwd(), 'docs/images', file),

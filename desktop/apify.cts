@@ -1,5 +1,18 @@
-function apifyResearch({ withKey, request = fetch }) {
+const fs = require('node:fs/promises');
+const path = require('node:path');
+function apifyResearch({ withKey, request = fetch, directory = undefined }) {
   const runs = new Map();
+  const ready = directory
+    ? fs
+        .readFile(path.join(directory, 'apify-runs.json'), 'utf8')
+        .then((raw) => {
+          for (const [id, dataset] of Object.entries(JSON.parse(raw))) runs.set(id, dataset);
+        })
+        .catch((error) => {
+          if (error.code !== 'ENOENT') throw error;
+        })
+    : Promise.resolve();
+  let writes = Promise.resolve();
   async function call(route, options = {}) {
     return withKey(async (key) => {
       let response;
@@ -25,6 +38,7 @@ function apifyResearch({ withKey, request = fetch }) {
     });
   }
   return async (action, args) => {
+    await ready;
     if (action === 'start') {
       const { platform, urls } = args;
       if (
@@ -55,7 +69,7 @@ function apifyResearch({ withKey, request = fetch }) {
                 .filter((u) => !/(video|photo)\//.test(u.pathname))
                 .map((u) => u.pathname.split('/').filter(Boolean)[0]?.replace(/^@/, '')),
               postURLs: parsed.filter((u) => /(video|photo)\//.test(u.pathname)).map((u) => u.href),
-              resultsPerPage: 6,
+              resultsPerPage: args.limit === 20 ? 20 : 6,
               shouldDownloadVideos: false,
               shouldDownloadCovers: false,
             };
@@ -66,10 +80,20 @@ function apifyResearch({ withKey, request = fetch }) {
       if (!data?.id || !data.defaultDatasetId)
         throw Error('Apify did not return a run reference. Check the console before retrying.');
       runs.set(data.id, data.defaultDatasetId);
+      if (directory) {
+        const snapshot = JSON.stringify(Object.fromEntries(runs), null, 2);
+        writes = writes.then(async () => {
+          await fs.mkdir(directory, { recursive: true });
+          const file = path.join(directory, 'apify-runs.json');
+          await fs.writeFile(file + '.tmp', snapshot, { mode: 0o600 });
+          await fs.rename(file + '.tmp', file);
+        });
+        await writes;
+      }
       return { runId: data.id, status: data.status, requestedMaxChargeUsd: 0.25 };
     }
     if (action !== 'result' || !runs.has(args.runId))
-      throw Error('Unknown collection run. Use a run started in this app session.');
+      throw Error('Unknown collection run. Use a run started by this MakePace installation.');
     const { data } = await call(
       'actor-runs/' + encodeURIComponent(args.runId) + '?waitForFinish=15',
     );

@@ -1,0 +1,213 @@
+.collection-bar {
+  grid-area: 1/1/2/-1;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e7e5dd;
+  z-index: 20;
+}
+.embedded {
+  grid-template-rows: 44px 44px minmax(0, 1fr);
+}
+.embedded main,
+.feed-rail {
+  grid-row: 3;
+}
+.preview-playback {
+  grid-row: 2;
+}
+.export-note {
+  font-size: 11px;
+  color: #66766d;
+  margin-left: auto;
+}
+.custom-select {
+  position: relative;
+  display: inline-flex;
+  min-width: 100px;
+  max-width: 420px;
+}
+.custom-select > select[hidden] {
+  display: none !important;
+}
+.instagram.tiktok-overlay .rail {
+  width: auto;
+}
+.instagram.tiktok-overlay .bottom small {
+  display: none;
+}
+.select-trigger {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #dfdfd5;
+  border-radius: 8px;
+  background: #fffdf9;
+  color: #23403d;
+  padding: 7px 10px;
+  width: 100%;
+  font: inherit;
+  font-size: 12px;
+}
+.select-trigger svg {
+  width: 14px;
+  height: 14px;
+}
+.select-trigger span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.select-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: min(540px, 85vw);
+  max-height: 330px;
+  overflow: auto;
+  background: #fffdf9;
+  border: 1px solid #deded5;
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0 10px 30px #183b3a20;
+  color: #23403d;
+}
+.select-menu[hidden] {
+  display: none;
+}
+.select-menu [role='option'] {
+  display: flex;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.select-menu [aria-selected='true'],
+.select-menu .highlighted {
+  background: #e1f0ea;
+}
+.instagram.tiktok-overlay #phone {
+  background: #fff;
+  color: #171717;
+  aspect-ratio: 9/18;
+}
+.instagram.tiktok-overlay .shade,
+.instagram.tiktok-overlay .status,
+.instagram.tiktok-overlay .record,
+.instagram.tiktok-overlay .avatar {
+  display: none;
+}
+.instagram.tiktok-overlay .feednav {
+  height: 45px;
+  padding: 12px;
+  justify-content: flex-start;
+  text-shadow: none;
+  font-size: 15px;
+}
+.instagram.tiktok-overlay .feednav strong:after {
+  display: none;
+}
+.instagram.tiktok-overlay #media {
+  inset: 46px 0 150px;
+  background: #f4f3ef;
+}
+.instagram.tiktok-overlay .rail {
+  top: auto;
+  bottom: 112px;
+  left: 10px;
+  right: 10px;
+  flex-direction: row;
+  gap: 14px;
+  align-items: center;
+}
+.instagram.tiktok-overlay .rail button {
+  color: #171717;
+}
+.instagram.tiktok-overlay .rail small {
+  display: none;
+}
+.instagram.tiktok-overlay #save {
+  margin-left: auto;
+  order: 4;
+}
+.instagram.tiktok-overlay .caption {
+  bottom: 48px;
+  left: 12px;
+  right: 12px;
+  color: #171717;
+  text-shadow: none;
+}
+.instagram.tiktok-overlay .caption strong {
+  font-size: 12px;
+}
+.instagram.tiktok-overlay #caption-text {
+  color: #171717;
+  font-size: 11px;
+  max-height: 28px;
+}
+.instagram.tiktok-overlay #track,
+.instagram.tiktok-overlay .follow {
+  display: none;
+}
+.instagram.tiktok-overlay .bottom {
+  background: #fff;
+  border-top: 1px solid #ddd;
+  color: #171717;
+  height: 40px;
+}
+.instagram.tiktok-overlay #counter {
+  top: 56px;
+}
+.instagram.tiktok-overlay #dots {
+  display: none;
+}
+@media (max-width: 600px) {
+  .export-note {
+    display: none;
+  }
+  .collection-bar .custom-select:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+body:not(.embedded) .collection-bar {
+  display: none;
+}
+.social-workspace-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #eff2eb;
+  color: #23403d;
+  font:
+    600 16px Manrope,
+    sans-serif;
+}
+.social-workspace-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #eff2eb;
+}
+.instagram.tiktok-overlay .feednav .social-workspace-avatar {
+  position: relative;
+  right: auto;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  opacity: 1;
+}
+.instagram.tiktok-overlay .feednav {
+  gap: 8px;
+}

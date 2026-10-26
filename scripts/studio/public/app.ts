@@ -167,16 +167,56 @@ function toast(text) {
 }
 const asset = (p) => new URL(p, location.origin + `/batches/${batch}/`).href;
 let gridSignature = '';
+const search = $('#content-search'),
+  statusFilter = $('#content-status');
+customSelect(statusFilter);
+search.oninput = () => grid();
+statusFilter.onchange = () => grid();
+const preview = document.createElement('dialog');
+preview.className = 'content-preview';
+preview.innerHTML =
+  '<header><strong>Preview</strong><button data-edit>Review & give feedback</button><button data-close aria-label="Close preview">✕</button></header><iframe title="Content preview" allow="autoplay; fullscreen"></iframe>';
+document.body.append(preview);
+preview.querySelector<HTMLButtonElement>('[data-close]').onclick = () => preview.close();
+preview.onclose = () => {
+  preview.classList.remove('preview-expanded');
+  preview.querySelector('iframe').src = 'about:blank';
+};
+preview.querySelector<HTMLButtonElement>('[data-edit]').onclick = () => {
+  const current = preview.querySelector('iframe').contentWindow.location.hash.replace('#post-', '');
+  selected = posts.find((p) => String(p.id) === current) || selected;
+  preview.close();
+  if (selected) reviewPost(selected.id);
+};
+function openPreview(p) {
+  selected = p;
+  preview.querySelector<HTMLButtonElement>('[data-edit]').hidden = false;
+  preview.querySelector('strong').textContent = `${p.id} · ${p.title}`;
+  preview.showModal();
+  preview.querySelector('iframe').src =
+    `/feed?batch=${encodeURIComponent(batch)}&workspaceId=${encodeURIComponent(workspace)}&embed=1&sound=1#post-${p.id}`;
+}
 function grid() {
   if (workspace !== 'hey-mom') return;
-  const signature = JSON.stringify([batch, posts, state.reviews]);
+  const signature = JSON.stringify([batch, posts, state.reviews, search.value, statusFilter.value]);
   if (signature === gridSignature) return;
   gridSignature = signature;
   const fragment = document.createDocumentFragment();
   let approved = 0;
+  let visible = 0;
   for (const p of posts) {
     const review = state.reviews[batch + ':' + p.id];
     if (review?.status === 'approved') approved++;
+    if (statusFilter.value !== 'all' && (review?.status || 'unreviewed') !== statusFilter.value)
+      continue;
+    if (
+      ![p.title, p.angle, p.caption, p.format]
+        .join(' ')
+        .toLowerCase()
+        .includes(search.value.toLowerCase().trim())
+    )
+      continue;
+    visible++;
     const c = node('button', undefined, 'card');
     const t = node('div', undefined, 'thumb'),
       img = new Image();
@@ -196,15 +236,19 @@ function grid() {
       ),
     );
     c.append(t, node('strong', `${p.id} · ${p.title || p.slug}`), node('small', p.format));
-    c.onclick = () => reviewPost(p.id);
+    c.onclick = () => openPreview(p);
     fragment.append(c);
   }
   $('#grid').replaceChildren(fragment);
+  $('#content-results').textContent = `${visible} posts`;
+  if (!visible) $('#grid').append(node('p', 'No posts match these filters.'));
   $('#review-count').textContent = `${approved} / ${posts.length} reviewed`;
 }
-async function loadBatch(id) {
+async function loadBatch(id, refreshFeed = true) {
   const version = ++loadVersion;
   batch = id;
+  $('#batch').value = id;
+  for (const option of $('#batch').options) option.toggleAttribute('selected', option.value === id);
   $('#review').hidden = true;
   selected = null;
   const r = await fetch(`/batches/${id}/manifest.json`);
@@ -216,7 +260,7 @@ async function loadBatch(id) {
   $('#context').textContent = id;
   grid();
   chat();
-  if (view === 'feed') feed();
+  if (view === 'feed' && refreshFeed) feed();
 }
 function reviewPost(id) {
   void showView('chat');
@@ -237,9 +281,11 @@ function reviewPost(id) {
 }
 function feed() {
   const p = selected ? `#post-${selected.id}` : '';
-  $('#feed').src = `/feed?batch=${batch}&embed=1${p}`;
+  $('#feed').src =
+    `/feed?batch=${batch}&workspaceId=${encodeURIComponent(workspace)}&embed=1&sound=1${p}`;
 }
 async function showView(name) {
+  document.body.classList.remove('feed-expanded');
   view = name;
   document.body.classList.toggle('desk-chat', name === 'chat' && workspace !== 'new');
   document.body.dataset.pageView = name;
@@ -300,6 +346,7 @@ async function showView(name) {
     return;
   }
   if (name === 'feed') feed();
+  if (name === 'batch') await archive();
   if (name === 'formats') await formats();
   if (name === 'queue') await queue();
 }
@@ -308,10 +355,105 @@ async function formats() {
   $('#formats').replaceChildren(
     ...f.families.map((x) => {
       const a = node('article', undefined, 'format');
+      const samples = node('div', undefined, 'format-samples');
+      for (const sample of x.samples || []) {
+        const b = node('button'),
+          image = new Image();
+        image.src = sample.image;
+        image.alt = sample.title || x.name;
+        image.loading = 'lazy';
+        b.append(image);
+        b.title = 'Open ' + image.alt;
+        b.onclick = async () => {
+          if (sample.batch) {
+            await loadBatch(sample.batch);
+            openPreview(posts.find((p) => p.id === sample.postId));
+          } else {
+            const d = document.createElement('dialog');
+            d.className = 'format-image-preview';
+            const close = node('button', 'Close');
+            close.onclick = () => d.close();
+            const img = new Image();
+            img.src = sample.image;
+            img.alt = image.alt;
+            d.append(close, img);
+            d.onclose = () => d.remove();
+            document.body.append(d);
+            d.showModal();
+          }
+        };
+        samples.append(b);
+      }
+      if (samples.children.length) a.append(samples);
+      a.append(node('small', x.collection.replaceAll('-', ' '), 'format-collection'));
       a.append(node('h3', x.name), node('p', x.pattern || x.description || ''));
+      if (x.nextTest) {
+        const details = node('details'),
+          summary = node('summary', 'How to use this format');
+        details.append(summary, node('p', x.nextTest));
+        for (const rule of x.invariants || []) details.append(node('p', '• ' + rule));
+        a.append(details);
+      }
+      if (/^https:\/\/(www\.)?(instagram|tiktok)\.com\//.test(x.reference || '')) {
+        const link = node('a', 'Original reference ↗');
+        link.href = x.reference;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        a.append(link);
+      }
       return a;
     }),
   );
+  if (!$('#format-search')) {
+    const input = node('input');
+    input.id = 'format-search';
+    input.type = 'search';
+    input.placeholder = 'Find a format or collection';
+    input.ariaLabel = 'Search formats';
+    input.className = 'format-search';
+    input.oninput = () => {
+      for (const card of document.querySelectorAll<HTMLElement>('#formats .format'))
+        card.hidden = !card.textContent.toLowerCase().includes(input.value.toLowerCase());
+    };
+    $('#formats').before(input);
+  }
+  $('#format-search').dispatchEvent(new Event('input'));
+}
+async function archive() {
+  const data = await api('outputs?workspaceId=' + encodeURIComponent(workspace));
+  const host = $('#preview-archive');
+  host.replaceChildren();
+  const previews = data.outputs.filter(
+    (o) => o.type === 'preview' && o.path.startsWith('social/carousels/output/'),
+  );
+  if (!previews.length) return;
+  host.append(
+    node('h3', 'Past previews'),
+    node('p', 'Earlier review pages, preserved as they were.'),
+  );
+  const list = node('div', undefined, 'archive-grid');
+  for (const output of previews) {
+    const a = node('a', undefined, 'archive-card');
+    a.href =
+      '/batches/' +
+      output.path
+        .slice('social/carousels/output/'.length)
+        .split('/')
+        .map(encodeURIComponent)
+        .join('/');
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.onclick = (event) => {
+      event.preventDefault();
+      preview.querySelector('strong').textContent = output.title;
+      preview.querySelector<HTMLButtonElement>('[data-edit]').hidden = true;
+      preview.showModal();
+      preview.querySelector('iframe').src = a.href;
+    };
+    a.append(node('strong', output.title + ' ↗'), node('p', output.description));
+    list.append(a);
+  }
+  host.append(list);
 }
 async function queue() {
   $('#queue').textContent = 'Reading OneUp…';
@@ -559,14 +701,32 @@ $('#refresh').onclick = () => {
   if (view === 'queue') queue();
   else loadBatch(batch).catch((e) => toast(e.message));
 };
-addEventListener('message', (e) => {
+addEventListener('message', async (e) => {
+  if (e.origin === location.origin && e.data?.type === 'feed-expand') {
+    if (e.source === $('#feed').contentWindow)
+      document.body.classList.toggle('feed-expanded', e.data.expanded === true);
+    else if (e.source === preview.querySelector('iframe').contentWindow)
+      preview.classList.toggle('preview-expanded', e.data.expanded === true);
+    return;
+  }
   if (
     e.origin !== location.origin ||
-    e.source !== $('#feed').contentWindow ||
+    (e.source !== $('#feed').contentWindow &&
+      e.source !== preview.querySelector('iframe').contentWindow) ||
     e.data?.type !== 'studio-post'
   )
     return;
+  if (e.data.batchId && e.data.batchId !== batch) {
+    try {
+      await loadBatch(e.data.batchId, false);
+    } catch (error) {
+      toast(error.message);
+      return;
+    }
+  }
   selected = posts.find((p) => p.id === e.data.postId);
+  if (preview.open && selected)
+    preview.querySelector('strong').textContent = `${selected.id} · ${selected.title}`;
   if (selected) $('#context').textContent = `Post ${selected.id} · ${selected.title}`;
 });
 async function switchWorkspace(id) {

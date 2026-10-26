@@ -231,15 +231,15 @@ small {
   font-weight: 600;
 }
 .avatar {
+  display: grid;
+  place-items: center;
   width: 38px;
   height: 38px;
-  background: #008548;
+  background: #eff2eb;
   border: 2px solid white;
   border-radius: 50%;
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 34px;
+  overflow: hidden;
+  line-height: 0;
 }
 .record {
   border: 9px solid #262626;

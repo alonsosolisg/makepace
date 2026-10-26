@@ -69,8 +69,34 @@ function bundledCodex() {
 async function start() {
   app.setName('MakePace');
   const userData = app.getPath('userData'),
-    workspace = process.env.MAKEPACE_WORKSPACE_ROOT || path.join(userData, 'workspace');
+    locationFile = path.join(userData, 'workspace-location.json');
+  const savedLocation = await fs
+    .readFile(locationFile, 'utf8')
+    .then(JSON.parse)
+    .catch((error) => {
+      if (error.code === 'ENOENT') return {};
+      throw error;
+    });
+  const workspace =
+    process.env.MAKEPACE_WORKSPACE_ROOT || savedLocation.path || path.join(userData, 'workspace');
   await fs.mkdir(workspace, { recursive: true });
+  // Preserve locations of existing brands when connecting an external campaign root.
+  const statePath = path.join(userData, 'studio/state.json');
+  if (existsSync(statePath)) {
+    const metadata = JSON.parse(await fs.readFile(statePath, 'utf8'));
+    let changed = false;
+    for (const record of Object.values(metadata.workspaces || {}) as any[]) {
+      const previous = path.join(userData, 'workspace/workspaces', record.id);
+      if (!record.directory && existsSync(previous)) {
+        record.directory = previous;
+        changed = true;
+      }
+    }
+    if (changed) {
+      await fs.writeFile(statePath + '.tmp', JSON.stringify(metadata, null, 2));
+      await fs.rename(statePath + '.tmp', statePath);
+    }
+  }
   const codex = process.env.MAKEPACE_CODEX_PATH || bundledCodex();
   if (!existsSync(codex))
     throw Error('The bundled Codex executable is missing. Reinstall MakePace.');
@@ -150,11 +176,13 @@ async function start() {
       nodeIntegration: false,
       sandbox: true,
       webSecurity: true,
+      autoplayPolicy: 'no-user-gesture-required',
     },
   });
   const ses = window.webContents.session;
   const integrations = integrationStore({ directory: userData, crypto: safeStorage });
   const collect = apifyResearch({
+    directory: userData,
     withKey: (callback) => integrations.withCredential('Apify', callback),
   });
   backend.on('message', (message) => {
@@ -362,6 +390,32 @@ async function start() {
       {
         label: 'MakePace',
         submenu: [
+          {
+            label: 'Connect existing content folder…',
+            click: async () => {
+              const picked = await dialog.showOpenDialog(window, {
+                title: 'Connect your existing content workspace',
+                properties: ['openDirectory'],
+              });
+              if (picked.canceled || !picked.filePaths[0]) return;
+              const chosen = picked.filePaths[0];
+              const result = await dialog.showMessageBox(window, {
+                type: 'question',
+                message: 'Use this content folder?',
+                detail:
+                  chosen +
+                  '\n\nMakePace will work directly with these files. Nothing is copied or published. The app will restart. Your previous folder remains untouched.',
+                buttons: ['Connect and restart', 'Cancel'],
+                defaultId: 0,
+                cancelId: 1,
+              });
+              if (result.response !== 0) return;
+              await fs.writeFile(locationFile, JSON.stringify({ path: chosen }, null, 2));
+              delete process.env.MAKEPACE_WORKSPACE_ROOT;
+              app.relaunch();
+              app.quit();
+            },
+          },
           { label: 'Open workspace folder', click: () => shell.openPath(workspace) },
           { label: 'Open app data folder', click: () => shell.openPath(userData) },
           { type: 'separator' },

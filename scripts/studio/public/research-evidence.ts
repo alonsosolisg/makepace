@@ -1,3 +1,4 @@
+import { setupSocialImport } from './social-import.js';
 const el = <K extends keyof HTMLElementTagNameMap>(
   tag: K,
   text?: string,
@@ -12,6 +13,7 @@ export function setupEvidence(getWorkspace) {
   const host = document.querySelector<HTMLElement>('#research-view'),
     shelf = el('section', null, 'evidence-shelf');
   host.append(shelf);
+  setupSocialImport(host, getWorkspace);
   let revision = 0,
     workspace = null,
     signature = null;

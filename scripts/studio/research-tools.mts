@@ -42,20 +42,22 @@ process.parentPort?.on('message', ({ data }) => {
   clearTimeout(p.timer);
   data.error ? p.reject(Error(data.error)) : p.resolve(data.result);
 });
-function desktopResearch(action, args) {
+export function desktopResearch(action, args) {
   if (!process.parentPort)
     throw Error(
       'Apify collection requires MakePace desktop and a saved Apify connection. Use makepace_inspect_page or public web search instead.',
     );
-  return new Promise<{ runId: string; items?: unknown[] }>((resolve, reject) => {
-    const id = randomUUID(),
-      timer = setTimeout(() => {
-        pending.delete(id);
-        reject(Error('Collection request timed out. Check existing run before retrying.'));
-      }, 60000);
-    pending.set(id, { resolve, reject, timer });
-    process.parentPort.postMessage({ type: 'research-request', id, action, args });
-  });
+  return new Promise<{ runId: string; status: string; observedAt?: string; items?: unknown[] }>(
+    (resolve, reject) => {
+      const id = randomUUID(),
+        timer = setTimeout(() => {
+          pending.delete(id);
+          reject(Error('Collection request timed out. Check existing run before retrying.'));
+        }, 60000);
+      pending.set(id, { resolve, reject, timer });
+      process.parentPort.postMessage({ type: 'research-request', id, action, args });
+    },
+  );
 }
 export async function inspectPage({ url, slide = 0 }, cwd) {
   if (!Number.isInteger(slide) || slide < 0 || slide > 15)

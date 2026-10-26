@@ -22,7 +22,9 @@ import { recordTool, settleTools } from './tool-activity.mjs';
 import { editConversation } from './conversations.mjs';
 import { collectOutputs, registerOutputs, readOutput } from './outputs.mjs';
 import { classifyEvidence } from './research-evidence.mjs';
-import { researchTools, runResearchTool } from './research-tools.mjs';
+import { researchTools, runResearchTool, desktopResearch } from './research-tools.mjs';
+import { saveBaseline } from './social-baseline.mjs';
+import { visualFormats } from './format-library.mjs';
 const cwd = workspaceRoot,
   output = outputRoot,
   stateFile = path.join(dataRoot, 'state.json');
@@ -31,6 +33,7 @@ const codex = new CodexConnection(),
   loadedThreads = new Set(),
   requests = new Map();
 const session = new CodexSession(codex);
+const importLocks = new Set();
 let state: StudioState = { conversations: {}, reviews: {} },
   account = null,
   active = null,
@@ -327,6 +330,28 @@ export async function studioAPI(req, res, url) {
       json(res, 200, Object.values(state.workspaces || {}));
       return true;
     }
+    if (req.method === 'GET' && endpoint === 'preview-brand') {
+      const id = url.searchParams.get('workspaceId');
+      const workspace = state.workspaces?.[id];
+      if (id !== 'hey-mom' && !workspace) throw Error('Unknown workspace');
+      json(res, 200, {
+        name: workspace?.name || 'Hey Mom App',
+        favicon: workspace?.favicon || (id === 'hey-mom' ? '/__studio/hey-mom-icon.svg' : null),
+      });
+      return true;
+    }
+    if (req.method === 'GET' && endpoint === 'social-baseline') {
+      const id = url.searchParams.get('workspaceId');
+      const root = id === 'hey-mom' ? cwd : workspacePartnerContext(state.workspaces, id, cwd).cwd;
+      try {
+        const file = await readOutput(root, 'research/social-baseline.json');
+        json(res, 200, JSON.parse(file.data.toString('utf8')));
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+        json(res, 200, { posts: [] });
+      }
+      return true;
+    }
     if (req.method === 'GET' && ['outputs', 'output'].includes(endpoint)) {
       const id = url.searchParams.get('workspaceId'),
         root = id === 'hey-mom' ? cwd : workspacePartnerContext(state.workspaces, id, cwd).cwd;
@@ -387,13 +412,7 @@ export async function studioAPI(req, res, url) {
       return true;
     }
     if (req.method === 'GET' && endpoint === 'formats') {
-      const data = await fs
-        .readFile(path.join(cwd, 'social/carousels/formats/library.json'), 'utf8')
-        .catch((e) => {
-          if (e.code === 'ENOENT') return '{"families":[]}';
-          throw e;
-        });
-      json(res, 200, JSON.parse(data));
+      json(res, 200, await visualFormats(cwd));
       return true;
     }
     if (req.method === 'GET' && endpoint === 'queue') {
@@ -424,7 +443,52 @@ export async function studioAPI(req, res, url) {
       return true;
     }
     const data = await body(req);
-    if (endpoint === 'connect') {
+    if (endpoint === 'social-import') {
+      const id = data.workspaceId;
+      if (importLocks.has(id)) throw Error('An import request is already in progress.');
+      importLocks.add(id);
+      try {
+        const target =
+          id === 'hey-mom' ? cwd : workspacePartnerContext(state.workspaces, id, cwd).cwd;
+        state.socialImports ??= {};
+        const previous = state.socialImports[id];
+        if (data.action === 'start') {
+          if (
+            previous &&
+            !['SUCCEEDED', 'FAILED', 'ABORTED', 'TIMED-OUT'].includes(previous.status)
+          )
+            throw Error('An import is already running. Check its status before starting another.');
+          const u = new URL(data.url);
+          const platform = u.hostname.replace(/^www\./, '').split('.')[0];
+          if (
+            u.protocol !== 'https:' ||
+            !['tiktok', 'instagram'].includes(platform) ||
+            !['www.' + platform + '.com', platform + '.com'].includes(u.hostname) ||
+            !/^\/@?[\w.]+\/?$/.test(u.pathname)
+          )
+            throw Error('Enter a public TikTok or Instagram profile URL.');
+          const result = await desktopResearch('start', { platform, urls: [u.href], limit: 20 });
+          state.socialImports[id] = { ...result, platform, url: u.href };
+          await save();
+          json(res, 200, state.socialImports[id]);
+        } else if (data.action === 'result' && previous) {
+          if (previous.imported !== undefined) {
+            json(res, 200, previous);
+            return true;
+          }
+          const result = await desktopResearch('result', { runId: previous.runId });
+          const summary = result.items
+            ? await saveBaseline(target, result, previous.platform, previous.url)
+            : {};
+          state.socialImports[id] = { ...previous, status: result.status, ...summary };
+          await save();
+          json(res, 200, state.socialImports[id]);
+        } else if (data.action === 'status') json(res, 200, previous || null);
+        else throw Error('No import to check.');
+      } finally {
+        importLocks.delete(id);
+      }
+    } else if (endpoint === 'connect') {
       account = await session.connect();
       if (!account) throw Error('Sign in with codex login in your terminal, then reconnect');
       state.autoReconnect = true;

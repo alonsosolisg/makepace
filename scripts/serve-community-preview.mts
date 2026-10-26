@@ -3,6 +3,7 @@ import { createReadStream, watchFile } from 'node:fs';
 import { stat, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { studioAPI } from './studio/api.mjs';
+import { previewBatch } from './studio/preview-batches.mjs';
 import { closeCodexConnections } from './studio/codex.mjs';
 import { appRoot, workspaceRoot, outputRoot } from './studio/paths.mjs';
 const root = path.resolve(
@@ -61,9 +62,7 @@ const server = createServer(async (req, res) => {
       })) {
         if (!entry.isDirectory()) continue;
         try {
-          const m = JSON.parse(
-            await readFile(path.join(output, entry.name, 'manifest.json'), 'utf8'),
-          );
+          const m = await previewBatch(output, entry.name);
           if (Array.isArray(m.posts) && m.posts.every((p) => p.images?.length || p.videoFile))
             batches.push({ id: entry.name, count: m.posts.length });
         } catch {}
@@ -71,6 +70,12 @@ const server = createServer(async (req, res) => {
       res
         .writeHead(200, { 'Content-Type': 'application/json' })
         .end(JSON.stringify({ current: path.basename(root), batches }));
+      return;
+    }
+    const batchManifest = url.pathname.match(/^\/batches\/([\w-]+)\/manifest\.json$/);
+    if (batchManifest) {
+      const manifest = await previewBatch(output, batchManifest[1]);
+      res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(manifest));
       return;
     }
     if (url.pathname === '/__preview/events') {
@@ -85,6 +90,9 @@ const server = createServer(async (req, res) => {
     if (url.pathname === '/' || url.pathname.startsWith('/landing/')) {
       base = path.join(appRoot, 'landing');
       pathname = url.pathname === '/' ? '/index.html' : url.pathname.slice(8);
+    } else if (pathname === '/favicon.png' || pathname === '/apple-touch-icon.png') {
+      base = path.join(appRoot, 'scripts/studio/public/icons');
+      pathname = pathname === '/favicon.png' ? '/icon-192.png' : '/icon-180.png';
     } else if (pathname === '/feed' || pathname === '/feed/') {
       base = feed;
       pathname = '/index.html';
@@ -97,6 +105,9 @@ const server = createServer(async (req, res) => {
     } else if (pathname === '/studio' || pathname === '/studio/') {
       base = path.join(appRoot, 'scripts/studio/public');
       pathname = '/index.html';
+    } else if (pathname === '/studio/public/select.js') {
+      base = path.join(appRoot, 'scripts/studio/public');
+      pathname = '/select.js';
     } else if (pathname.startsWith('/__studio/')) {
       base = path.join(appRoot, 'scripts/studio/public');
       pathname = pathname.slice(9);

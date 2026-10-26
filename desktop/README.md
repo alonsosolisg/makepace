@@ -22,6 +22,21 @@ Installed metadata lives in Electron `userData/studio`, content in
 `userData/workspace`. Browser development uses ignored `.studio/` and
 `data/workspace/` in this repository. The MakePace menu opens data directories.
 
+Use **MakePace → Connect existing content folder…** to work with an existing
+content directory. The app stores the chosen location in `userData/workspace-location.json`
+and restarts. It does not copy or publish the contents. An explicit
+`MAKEPACE_WORKSPACE_ROOT` takes precedence. Existing supported batch manifests and
+the format library load from that folder. Existing workspaces in the default data
+directory retain their original locations; their files are not moved.
+
+In **Research → Already posting?**, import a public TikTok or Instagram profile
+through the saved Apify connection. Each run requests at most 20 results and a
+$0.25 charge cap. Check the existing run to retrieve results; imports are not
+automatically retried. Run references survive app restarts. Published captions,
+links and metric snapshots are stored in `research/social-baseline.json`, separately
+from editable drafts. Missing metrics remain null. Scraping does not establish
+ownership, guarantee complete account history or recreate original project files.
+
 | Variable                     | Purpose                                 |
 | ---------------------------- | --------------------------------------- |
 | `MAKEPACE_WORKSPACE_ROOT`    | Explicit external content directory     |

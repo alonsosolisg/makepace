@@ -1,30 +1,189 @@
+@font-face {
+  font-family: Manrope;
+  src: url('/__studio/fonts/manrope-variable.ttf') format('truetype');
+  font-weight: 200 800;
+}
+html:fullscreen {
+  width: 100vw;
+  height: 100dvh;
+  background: #fffdf9;
+}
+.embedded {
+  align-items: stretch;
+  background: #fffdf9;
+  color: #23403d;
+  display: grid;
+  grid-template: 48px minmax(0, 1fr) / minmax(0, 1fr) 104px;
+  height: 100dvh;
+  min-height: 0;
+  gap: 0;
+  overflow: hidden;
+  font-family: Manrope, sans-serif;
+}
 .embedded .workspace,
 .embedded #mobile-tools {
   display: none !important;
 }
-.embedded {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-}
 .embedded main {
-  padding: 12px 0;
+  grid-area: 2/1;
+  padding: 8px 54px 38px;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  justify-content: center;
 }
 .embedded #phone {
-  height: calc(100dvh - 42px);
+  height: 100%;
+  max-width: 100%;
   width: auto;
+  aspect-ratio: 9/16;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  flex-shrink: 1;
+}
+.embedded #media {
+  inset: 0;
+  background: transparent;
+}
+.embedded:not(.tiktok-overlay) #phone > :not(#media):not(#toast) {
+  display: none;
+}
+.embedded.tiktok-overlay #phone {
   aspect-ratio: 9/19.5;
-  border-radius: 24px;
-  box-shadow: 0 0 0 4px #28302c;
+}
+.embedded.tiktok-overlay #media {
+  inset: 0 0 55px;
 }
 .embedded #position {
   display: block;
-  font-size: 9px;
-  padding-top: 10px;
+  position: absolute;
+  bottom: 8px;
+  font-size: 11px;
+  color: #65746b;
+  padding: 0;
+}
+.preview-playback {
+  grid-area: 1/1/2/-1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #e7e5dd;
+  padding: 0 12px;
+  min-width: 0;
+}
+.preview-playback button,
+.slide-navigation button {
+  border: 1px solid #dfdfd5;
+  background: #fffdf9;
+  color: #23403d;
+  border-radius: 9px;
+  padding: 7px 11px;
+  white-space: nowrap;
+  min-height: 34px;
+}
+.preview-playback button:hover,
+.slide-navigation button:hover {
+  background: #eaf3ef;
+  border-color: #008482;
+}
+.preview-playback button:disabled,
+.slide-navigation button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.preview-playback [aria-pressed='true'] {
+  color: #007d7b;
+  background: #e1f0ea;
+}
+.preview-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 650;
+}
+.feed-rail {
+  min-height: 0;
+  grid-area: 2/2;
+  padding: 10px 10px 16px;
+  border-left: 1px solid #e7e5dd;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #b8c9c1 transparent;
+}
+.feed-rail button {
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  flex-shrink: 0;
+  color: #51665f;
+  font-size: 10px;
+}
+.feed-rail button.active {
+  border-color: #008482;
+  background: #eaf3ef;
+}
+.feed-rail img {
+  width: 64px;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  display: block;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+.slide-navigation {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+.slide-navigation button {
+  pointer-events: auto;
+  font-size: 23px;
+  width: 36px;
+  padding: 0;
+  min-height: 44px;
+}
+.embedded button:focus-visible {
+  outline: 2px solid #007d7b;
+  outline-offset: 2px;
 }
 #close-tools {
   display: none;
+}
+@media (max-width: 600px) {
+  .embedded {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .feed-rail,
+  .preview-title {
+    display: none;
+  }
+  .preview-playback {
+    justify-content: center;
+    gap: 5px;
+    padding: 0 4px;
+  }
+  .preview-playback button {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+  .embedded main {
+    padding: 6px 40px 30px;
+  }
+  .slide-navigation {
+    padding: 2px;
+  }
 }
 @media (max-width: 720px) {
   #close-tools {
