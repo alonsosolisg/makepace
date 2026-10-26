@@ -36,10 +36,10 @@
   },
   "devDependencies": {
     "electron": "45.0.0",
-    "electron-builder": "26.15.3",
+    "electron-builder": "26.17.0",
     "typescript": "~5.9.3",
     "tsx": "^4.20.6",
-    "esbuild": "^0.25.12",
+    "esbuild": "^0.28.2",
     "@types/node": "^22.19.0",
     "eslint": "^10.13.0",
     "typescript-eslint": "^8.46.4",
