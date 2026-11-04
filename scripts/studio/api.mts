@@ -16,7 +16,7 @@ import {
 import { favicon, savedFavicon } from './favicon.mjs';
 import { modelSettings, turnSettings } from './model-settings.mjs';
 import { workspacePartnerContext } from './partner-context.mjs';
-import { appRoot, dataRoot, workspaceRoot, outputRoot } from './paths.mjs';
+import { appRoot, dataRoot, workspaceRoot, outputRoot, confinedPath } from './paths.mjs';
 import { pathToFileURL } from 'node:url';
 import { recordTool, settleTools } from './tool-activity.mjs';
 import { editConversation } from './conversations.mjs';
@@ -115,7 +115,10 @@ const batchPath = (id) => {
   return path.join(output, id);
 };
 async function manifest(id) {
-  const m = JSON.parse(await fs.readFile(path.join(batchPath(id), 'manifest.json'), 'utf8'));
+  batchPath(id);
+  const m = JSON.parse(
+    await fs.readFile(await confinedPath(output, path.join(id, 'manifest.json')), 'utf8'),
+  );
   if (!Array.isArray(m.posts)) throw Error('Batch has no posts');
   return m;
 }
