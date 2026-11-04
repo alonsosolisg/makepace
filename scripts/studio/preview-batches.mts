@@ -1,13 +1,15 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { confinedPath } from './paths.mjs';
 
 export async function previewBatch(output, id) {
   if (!/^[\w-]+$/.test(id)) throw Error('Invalid batch');
-  const root = path.join(output, id);
   for (const file of ['manifest.json', 'copy-and-production.json', 'batch.json']) {
     let source;
     try {
-      source = JSON.parse(await fs.readFile(path.join(root, file), 'utf8'));
+      source = JSON.parse(
+        await fs.readFile(await confinedPath(output, path.join(id, file)), 'utf8'),
+      );
     } catch (e) {
       if (e.code === 'ENOENT') continue;
       throw e;
@@ -18,7 +20,9 @@ export async function previewBatch(output, id) {
     for (const p of source.posts) {
       const platformImages = {};
       for (const platform of ['tiktok', 'instagram']) {
-        const folders = await fs.readdir(path.join(root, platform)).catch(() => []);
+        const folders = await confinedPath(output, path.join(id, platform))
+          .then((directory) => fs.readdir(directory))
+          .catch(() => []);
         const folder = folders.find(
           (f) =>
             f === p.slug ||
@@ -26,7 +30,9 @@ export async function previewBatch(output, id) {
             f.startsWith(`${String(p.id).padStart(2, '0')}-`),
         );
         if (!folder) continue;
-        const images = (await fs.readdir(path.join(root, platform, folder)))
+        const images = (
+          await fs.readdir(await confinedPath(output, path.join(id, platform, folder)))
+        )
           .filter((f) => /^\d+\.(jpg|png|webp)$/i.test(f))
           .sort();
         if (images.length)

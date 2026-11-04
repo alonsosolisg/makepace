@@ -5,7 +5,7 @@ import path from 'node:path';
 import { studioAPI } from './studio/api.mjs';
 import { previewBatch } from './studio/preview-batches.mjs';
 import { closeCodexConnections } from './studio/codex.mjs';
-import { appRoot, workspaceRoot, outputRoot } from './studio/paths.mjs';
+import { appRoot, workspaceRoot, outputRoot, confinedPath } from './studio/paths.mjs';
 const root = path.resolve(
   workspaceRoot,
   process.env.COMMUNITY_PREVIEW_ROOT || 'social/carousels/output/hm-organizer-30-2026-10-23',
@@ -47,7 +47,18 @@ const server = createServer(async (req, res) => {
     return;
   }
   res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   try {
+    // Protect every route: batch files are private too, not just the mutation API.
+    const requestOrigin = new URL('http://' + req.headers.host);
+    if (
+      !['localhost', '127.0.0.1', '[::1]'].includes(requestOrigin.hostname) ||
+      requestOrigin.host !== req.headers.host ||
+      (req.headers.origin && req.headers.origin !== requestOrigin.origin)
+    ) {
+      res.writeHead(403).end('Use localhost to open Studio');
+      return;
+    }
     const url = new URL(req.url, 'http://localhost');
     if (await studioAPI(req, res, url)) return;
     if (!['GET', 'HEAD'].includes(req.method)) {
@@ -118,9 +129,14 @@ const server = createServer(async (req, res) => {
       base = output;
       pathname = pathname.slice(8);
     }
-    const file = path.resolve(base, '.' + pathname),
-      relative = path.relative(base, file);
-    if (relative.startsWith('..') || path.isAbsolute(relative) || !types[path.extname(file)]) {
+    const requested = path.resolve(base, '.' + pathname),
+      relative = path.relative(base, requested);
+    if (relative.startsWith('..') || path.isAbsolute(relative) || !types[path.extname(requested)]) {
+      res.writeHead(404).end();
+      return;
+    }
+    const file = await confinedPath(base, relative);
+    if (!types[path.extname(file)]) {
       res.writeHead(404).end();
       return;
     }
@@ -129,6 +145,12 @@ const server = createServer(async (req, res) => {
       res.writeHead(404).end();
       return;
     }
+    // Campaign documents are untrusted, including when opened as a top-level page.
+    if (base === root || base === output)
+      res.setHeader(
+        'Content-Security-Policy',
+        "sandbox; default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; base-uri 'none'; form-action 'none'",
+      );
     // Cache public landing assets; keep private state and campaign previews fresh.
     const landingAsset =
       (base === path.join(appRoot, 'landing') && path.extname(file) !== '.html') ||

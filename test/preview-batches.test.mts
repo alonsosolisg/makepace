@@ -31,3 +31,25 @@ test('legacy preview uses actual exports and preserves platform variants', async
     await fs.rm(root, { recursive: true, force: true });
   }
 });
+
+test('preview manifests cannot read outside the output root through symlinks', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'preview-boundary-'));
+  try {
+    const output = path.join(root, 'output');
+    await fs.mkdir(path.join(output, 'batch'), { recursive: true });
+    await fs.writeFile(
+      path.join(root, 'private.json'),
+      JSON.stringify({ posts: [{ images: ['private.png'] }] }),
+    );
+    await fs.symlink(path.join(root, 'private.json'), path.join(output, 'batch/manifest.json'));
+    await assert.rejects(() => previewBatch(output, 'batch'), /outside its root/);
+    await fs.symlink(root, path.join(output, 'linked'), 'dir');
+    await fs.writeFile(
+      path.join(root, 'manifest.json'),
+      JSON.stringify({ posts: [{ images: ['private.png'] }] }),
+    );
+    await assert.rejects(() => previewBatch(output, 'linked'), /outside its root/);
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
