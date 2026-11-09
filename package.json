@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "puppeteer-core": "^25.10.0",
-    "@openai/codex": "0.164.0"
+    "@openai/codex": "0.166.0"
   },
   "devDependencies": {
     "electron": "45.0.0",
